@@ -1,8 +1,14 @@
+import CallForAction from '@/components/CallForAction';
+import Solution from '@/components/Solution'
+import HomePageData from "@/fakeDatas/HomePageFakes"
 
 export default function Home() {
   return (
     <>
-      <h1>Your server is running at Home page</h1>
+      <div className='flex flex-col gap-10 justify-center items-center mt-5'>
+       <Solution SolutionSectionData={HomePageData.SolutionSectionData}/>
+       <CallForAction  CallForActionData={HomePageData.CallForActionData}/>
+      </div>
     </>
   );
 }

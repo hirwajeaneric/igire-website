@@ -8,7 +8,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        'plex-sans': ['"IBM Plex Sans"', 'sans-serif'],
+        'ibm': ['var(--font-ibm-plex-sans)'],
       },
       colors: {
         background: "var(--background)",
