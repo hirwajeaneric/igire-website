@@ -1,4 +1,4 @@
-import React from "react";
+
 
 const Solution = ({ SolutionSectionData }) => {
   const { description, btn1, btn2 } = SolutionSectionData;
