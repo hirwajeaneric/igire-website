@@ -4,7 +4,7 @@ const CallForAction = ({ CallForActionData }) => {
   const { title, description, btn } = CallForActionData;
   return (
     <>
-      <div className="border border-black py-5 px-10 max-w-[50%] text-center flex flex-col gap-5 font-ibm">
+      <div className="border border-black py-[3rem] px-[10rem] max-w-[70%] text-center flex flex-col gap-5 font-ibm">
         <div>
           <h2 className="text-2xl font-bold">{title}</h2>
         </div>

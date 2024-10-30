@@ -79,8 +79,8 @@ const HomePageData = {
         btn: "Donate Now",
     },
     PartnersData: {
-        title: "Become Our Supporter Today",
-        description: "Support our mission to empower women. Your donation fuels impactful programs, bridging skill gaps and building future leaders. Join us in making a difference today!",
+        title: "Trusted By",
+        description: "Join us as a partner and help empower women to thrive in tech and entrepreneurship. Your support enables us to bridge skills gaps, foster innovation, and inspire the next generation of leaders. Together, we can create lasting impact.",
         companies: [
             { src: 'https://shecancode-website-dev.vercel.app/IRO.png', alt: 'IRO logo' },
             { src: 'https://shecancode-website-dev.vercel.app/mastercard-logo.png', alt: 'Mastercard foundation logo' },
