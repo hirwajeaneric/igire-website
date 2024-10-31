@@ -1,4 +1,7 @@
 import CallForAction from '@/components/sections/CallForAction';
+import HeroSection from '@/components/sections/heroSection';
+import Impact from '@/components/sections/impact';
+import Navbar from '@/components/sections/navBar';
 import Partners from '@/components/sections/Partners';
 import Solution from '@/components/sections/Solution'
 import HomePageData from "@/fakeDatas/HomePageFakes"
@@ -6,8 +9,10 @@ import HomePageData from "@/fakeDatas/HomePageFakes"
 export default function Home() {
   return (
     <>
-      <div className='flex flex-col gap-10 justify-center items-center mt-5'>
-       <h1>Hello this is the home page</h1>
+      <div>
+       <Navbar></Navbar>
+       <HeroSection></HeroSection>
+       <Impact></Impact>
       </div>
     </>
   );
