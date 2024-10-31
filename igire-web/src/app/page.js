@@ -1,4 +1,7 @@
 import CallForAction from '@/components/sections/CallForAction';
+import HeroSection from '@/components/sections/heroSection';
+import Impact from '@/components/sections/impact';
+import Navbar from '@/components/sections/navBar';
 import Partners from '@/components/sections/Partners';
 import Solution from '@/components/sections/Solution'
 import HomePageData from "@/fakeDatas/HomePageFakes"
@@ -8,7 +11,13 @@ import Footer from '@/components/Footer.jsx';
 export default function Home() {
   return (
     <>
-     <div>Home</div>
+      <div>
+       <Navbar/>
+       <HeroSection/>
+       <Whatwedo />
+       <Impact/>
+       <Footer/>
+      </div>
     </>
   );
 }
