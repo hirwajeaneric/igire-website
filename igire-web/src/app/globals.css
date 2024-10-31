@@ -2,13 +2,3 @@
 @tailwind components;
 @tailwind utilities;
 
-/* How to  use the ibm font */
-
-/* 
-
-font-ibm : FOR NORMAL TEXT
-font-ibm, add font-bold : FOR BOLD IBM TEXT
-font-ibm, text-6xl: FOR BIG SIZE IBM TEXT 
- font-ibm, text-6xl and font-bold : FOR BIG SIZE BOLD IBM TEXT  
-
- */
