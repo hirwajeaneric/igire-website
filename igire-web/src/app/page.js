@@ -18,9 +18,6 @@ export default function Home() {
        <Impact/>
        <Footer/>
       </div>
-      
-      
-      
     </>
   );
 }
