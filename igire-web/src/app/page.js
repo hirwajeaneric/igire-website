@@ -5,6 +5,7 @@ import Solution from "@/components/sections/Solution";
 import HomePageData from "@/fakeDatas/HomePageFakes";
 import WhatWeDo from "@/components/sections/WhatWeDo";
 import ImpactSection from "@/components/sections/impact.jsx";
+import BlogPage from '@/components/sections/blog';
 
 export default function Home() {
   return (
@@ -17,6 +18,8 @@ export default function Home() {
         <CallForAction CallForActionData={HomePageData.CallForActionData} />
         <Partners PartnersData={HomePageData.PartnersData} />
       </div>
+      <BlogPage></BlogPage>
+      
     </>
   );
 }
