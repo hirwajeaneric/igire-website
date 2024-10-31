@@ -6,25 +6,19 @@ import { useEffect, useState } from 'react';
 const slidesData = [
   {
     type: 'image',
-    src: '/shecancode3.jpg',
-    caption: 'AWE',
-  },
-  {
-    type: 'image',
-    src: '/presenting.jpg',
-    caption: 'AWE',
-  },
-
-  {
-    type: 'image',
     src: '/shecancode1.jpg',
-    caption: 'AWE',
+    caption: 'SheCanCancode bootcamp',
   },
-  // {
-  //   type: 'video',
-  //   src: '/SheCanCODE Cohort 2 Graduation.mp4',
-  //   caption: 'Inspiraton and testimonies',
-  // },
+  {
+    type: 'image',
+    src: '/shecancode2.jpg',
+    caption: 'ShecanCode Aluminus',
+  },
+  {
+    type: 'video',
+    src: '/SheCanCODE Cohort 2 Graduation.mp4',
+    caption: 'Inspiraton and testimonies',
+  },
 ];
 
 export default function Slideshow() {
@@ -68,7 +62,7 @@ export default function Slideshow() {
                   e.target.play();
                   handleMouseLeave();
                 }}
-                // autoPlay
+                autoPlay
                 muted
                 loop
               />

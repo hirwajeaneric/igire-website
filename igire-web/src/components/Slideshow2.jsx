@@ -6,13 +6,19 @@ import { useEffect, useState } from 'react';
 const slidesData = [
   {
     type: 'image',
-    src: '/shecancode1.jpg',
-    caption: 'SheCanCancode bootcamp',
+    src: '/shecancode3.jpg',
+    caption: 'AWE',
   },
   {
     type: 'image',
-    src: '/shecancode2.jpg',
-    caption: 'ShecanCode Aluminus',
+    src: '/presenting.jpg',
+    caption: 'AWE',
+  },
+
+  {
+    type: 'image',
+    src: '/shecancode1.jpg',
+    caption: 'AWE',
   },
   {
     type: 'video',
