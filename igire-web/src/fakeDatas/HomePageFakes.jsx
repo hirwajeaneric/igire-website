@@ -1,3 +1,4 @@
+
 const HomePageData = {
     // bannerData: {
     //     title: "",
@@ -96,6 +97,30 @@ const HomePageData = {
             { src: 'https://shecancode-website-dev.vercel.app/Angle-dimensions.png', alt: 'Angle Dimension' },
         ]
     },
+    ImpactData:{
+        impactStats :[
+            {
+                number: "571,000",
+                description: "Promoted young girls targeting in schools and STEM communities in tech.",
+            },
+            {
+                number: "101,000",
+                description: "Connect young women with female professionals in the industry.",
+            },
+            {
+                number: "98,700",
+                description: "Advocate for gender-neutral STEM curricula and materials.",
+            },
+        ],
+    
+        images: [
+            { src: "/presenting.jpg", alt: 'Succes stories' },
+            { src: "/hero.png", alt: 'Succes stories' },
+            { src: "/shecancode1.jpg", alt: 'Succes stories' },
+            { src: "/vistors.jpg", alt: 'Succes stories' },
+            { src: "/img.png", alt: 'Succes stories' },
+        ]
+    }
 };
 
 export default HomePageData;
