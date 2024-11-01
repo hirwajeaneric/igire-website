@@ -46,7 +46,9 @@ export default function BlogPage() {
   ]
 
   return (
+    
     <div className="container mx-auto px-4 py-8">
+      <div className=" text-4xl text-center pb-6">Featured stories</div>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {articles.map((article) => (
           <div key={article.id} className="bg-white rounded-lg shadow-md overflow-hidden group hover:shadow-lg transition-shadow duration-300">
@@ -61,10 +63,10 @@ export default function BlogPage() {
               />
             </div>
             <div className="p-4">
-              <h2 className="text-xl font-semibold leading-tight mb-2 group-hover:text-primary transition-colors duration-300">
+              <h2 className="text-2xl font-semibold leading-tight mb-2 group-hover:text-primary transition-colors duration-300">
                 {article.title}
               </h2>
-              <p className="text-sm text-gray-600 line-clamp-3 mb-4">
+              <p className="text-xl text-gray-600 line-clamp-3 mb-4">
                 {article.description}
               </p>
               <Link href={article.button.location} className="inline-flex items-center text-sm font-medium text-primary hover:text-primary-dark transition-colors duration-300">

@@ -7,6 +7,7 @@ import WhatWeDo from "@/components/sections/WhatWeDo";
 import ImpactSection from "@/components/sections/impact.jsx";
 import BlogPage from '@/components/sections/blog';
 
+
 export default function Home() {
   return (
     <>
@@ -15,10 +16,11 @@ export default function Home() {
         <Solution SolutionSectionData={HomePageData.SolutionSectionData} />
         <WhatWeDo />
         <ImpactSection ImpactData={HomePageData.ImpactData} />
+        <BlogPage></BlogPage>
         <CallForAction CallForActionData={HomePageData.CallForActionData} />
         <Partners PartnersData={HomePageData.PartnersData} />
       </div>
-      <BlogPage></BlogPage>
+      
       
     </>
   );
