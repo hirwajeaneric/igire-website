@@ -1,22 +1,21 @@
 import CallForAction from "@/components/sections/CallForAction";
-import HeroSection from "@/components/sections/HeroSection.jsx";
-import Navbar from "@/components/sections/NavBar.jsx";
+import HeroSection from "@/components/sections/heroSection.jsx";
 import Partners from "@/components/sections/Partners";
 import Solution from "@/components/sections/Solution";
 import HomePageData from "@/fakeDatas/HomePageFakes";
-import WhatWeDo from "./whatwedo/page.jsx";
-import Footer from "@/components/Footer.jsx";
-import ImpactSection from "@/components/sections/Impact.jsx";
+import WhatWeDo from "@/components/sections/WhatWeDo";
+import ImpactSection from "@/components/sections/impact.jsx";
 
 export default function Home() {
   return (
     <>
-      <div>
-        <Navbar />
-        <HeroSection />
+      <HeroSection />
+      <div className="flex flex-col gap-44">
+        <Solution SolutionSectionData={HomePageData.SolutionSectionData} />
         <WhatWeDo />
         <ImpactSection ImpactData={HomePageData.ImpactData} />
-        <Footer />
+        <CallForAction CallForActionData={HomePageData.CallForActionData} />
+        <Partners PartnersData={HomePageData.PartnersData} />
       </div>
     </>
   );

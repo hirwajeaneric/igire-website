@@ -1,5 +1,7 @@
+import Navbar from "@/components/sections/navBar";
 import "./globals.css";
 import { imb } from "./utils/fonts";
+import Footer from "@/components/Footer";
 
 export const metadata = {
   title: "IRO",
@@ -12,7 +14,9 @@ export default function RootLayout({ children }) {
       <body
         className={`${imb}`}
       >
-        {children}
+        <Navbar />
+         {children}
+        <Footer />
       </body>
     </html>
   );

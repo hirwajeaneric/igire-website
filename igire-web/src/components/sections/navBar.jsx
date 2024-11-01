@@ -9,7 +9,7 @@ export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <nav className="sticky top-0 z-50 flex items-center md:justify-between justify-between md:px-36 px-6 py-6 bg-white shadow-md">
+        <nav className="sticky top-0 z-50 flex items-center md:justify-between justify-between md:px-36 px-6 py-6 bg-white shadow-md font-ibm">
             <div className="flex items-center space-x-2">
                 <img src={navbarData.logoSrc} alt={navbarData.logoAlt} className="md:h-16 h-10" />
                 <span className="md:text-3xl text-2xl">{navbarData.title}</span>
