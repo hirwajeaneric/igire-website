@@ -6,6 +6,7 @@ import HomePageData from "@/fakeDatas/HomePageFakes";
 import WhatWeDo from "@/components/sections/WhatWeDo";
 import ImpactSection from "@/components/sections/impact.jsx";
 import HistoricalBackground from "@/components/sections/historicalBackground"
+import BlogPage from "@/components/sections/Blog"
 
 export default function Home() {
   return (
@@ -13,9 +14,10 @@ export default function Home() {
       <HeroSection />
       <div className="flex flex-col gap-44">
         <Solution SolutionSectionData={HomePageData.SolutionSectionData} />
+        <HistoricalBackground HistoryBgData={HomePageData.HistoryBgData}/>
         <WhatWeDo />
         <ImpactSection ImpactData={HomePageData.ImpactData} />
-        <HistoricalBackground/>
+        <BlogPage/>
         <CallForAction CallForActionData={HomePageData.CallForActionData} />
         <Partners PartnersData={HomePageData.PartnersData} />
       </div>

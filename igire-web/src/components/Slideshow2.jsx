@@ -6,23 +6,23 @@ import { useEffect, useState } from 'react';
 const slidesData = [
   {
     type: 'image',
-    src: '/shecancode3.jpg',
+    src: 'https://res.cloudinary.com/drfzbtbzi/image/upload/v1730473374/tb5ckb00ipfwqz4pxqxp.jpg',
     caption: 'AWE',
   },
   {
     type: 'image',
-    src: '/presenting.jpg',
+    src: 'https://res.cloudinary.com/drfzbtbzi/image/upload/v1730472986/presentaion.jpg',
     caption: 'AWE',
   },
 
   {
     type: 'image',
-    src: '/shecancode1.jpg',
+    src: 'https://res.cloudinary.com/drfzbtbzi/image/upload/v1730473340/scc-1.jpg',
     caption: 'AWE',
   },
   {
     type: 'video',
-    src: '/SheCanCODE Cohort 2 Graduation.mp4',
+    src: 'https://res.cloudinary.com/drfzbtbzi/video/upload/v1730670533/igire-video.mp4',
     caption: 'Inspiraton and testimonies',
   },
 ];
