@@ -11,6 +11,9 @@ const page = () => {
       <div>
         <DefaultBanner title={FakeTitle} backgroundImage={backgroundImage}/>
       </div>
+      <div>
+        <h1>The rest of the sections</h1>
+      </div>
      </div>
     </>
   )
