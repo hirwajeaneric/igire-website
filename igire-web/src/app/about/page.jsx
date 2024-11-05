@@ -1,9 +1,17 @@
+import DefaultBanner from '@/components/DefaultBanner'
 import React from 'react'
+import AboutPageFakes from "@/fakeDatas/AboutPageFakes"
 
 const page = () => {
+  const { bannerData: { backgroundImage, FakeTitle } } = AboutPageFakes;
+
   return (
     <>
-     <h1>about page</h1>
+     <div>
+      <div>
+        <DefaultBanner title={FakeTitle} backgroundImage={backgroundImage}/>
+      </div>
+     </div>
     </>
   )
 }
