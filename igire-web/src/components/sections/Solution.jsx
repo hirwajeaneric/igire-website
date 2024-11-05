@@ -4,8 +4,8 @@ const Solution = ({ SolutionSectionData }) => {
   const { description, btn1, btn2 } = SolutionSectionData;
   return (
     <>
-      <div className="flex justify-center">
-      <div className="bg-black py-[4rem] px-[10rem] max-w-[70%] text-center flex flex-col gap-5 font-ibm">
+      <div className="bg-black flex justify-center">
+      <div className="py-[4rem] px-[10rem] max-w-[89rem] text-center flex flex-col gap-5 font-ibm">
         <div>
           <p className="text-white font-ibm text-xl">{description}</p>
         </div>
