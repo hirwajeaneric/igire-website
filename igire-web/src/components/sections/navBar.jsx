@@ -24,21 +24,15 @@ export default function Navbar() {
         </div>
 
         <div className="hidden md:flex md:justify-center md:items-center mx- space-x-12  text-xl font-bold">
-          <div>
-            <h2>Home</h2>
-          </div>
-          <div>
-            <h2>About</h2>
-          </div>
-          <div>
-            <h2>Programs</h2>
-          </div>
-          <div>
-            <h2>Career</h2>
-          </div>
-          <div>
-            <h2>Contact</h2>
-          </div>
+          {navbarData.links.map((link, index) => (
+            <a
+              key={index}
+              href={link.href}
+              className="text-gray-800 hover:text-orange-700 font-semibold"
+            >
+              {link.label}
+            </a>
+          ))}
         </div>
 
         <div className="md:hidden flex items-center gap-4">
