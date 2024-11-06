@@ -9,9 +9,9 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="sticky top-0 z-50 flex justify-center px-6 py-6 bg-white shadow-md font-ibm w-full">
-      <div className="border flex">
-        <div className="flex items-center space-x-2">
+    <nav className="bg-white sticky top-0 z-50 flex justify-center px-6 py-6 shadow-md font-ibm w-full">
+      <div className=" flex justify-between w-full md:max-w-[90rem]">
+        <div className="flex items-center">
           <img
             src={navbarData.logoSrc}
             alt={navbarData.logoAlt}
@@ -19,20 +19,26 @@ export default function Navbar() {
           />
           <div className="flex flex-col">
             <h2 className="text-sm">{navbarData.title1}</h2>
-            <p className="text-lg">{navbarData.title2}</p>
+            <p className="text-md">{navbarData.title2}</p>
           </div>
         </div>
 
-        <div className="hidden md:flex space-x-12">
-          {navbarData.links.map((link, index) => (
-            <a
-              key={index}
-              href={link.href}
-              className="text-gray-800 hover:text-orange-700 font-semibold"
-            >
-              {link.label}
-            </a>
-          ))}
+        <div className="hidden md:flex md:justify-center md:items-center mx- space-x-12  text-xl font-bold">
+          <div>
+            <h2>Home</h2>
+          </div>
+          <div>
+            <h2>About</h2>
+          </div>
+          <div>
+            <h2>Programs</h2>
+          </div>
+          <div>
+            <h2>Career</h2>
+          </div>
+          <div>
+            <h2>Contact</h2>
+          </div>
         </div>
 
         <div className="md:hidden flex items-center gap-4">
@@ -80,8 +86,8 @@ export default function Navbar() {
           </div>
         )}
 
-        <div className="items-center justify-center h-full hidden md:block space-x-8">
-          <button className="bg-black text-white px-4 py-2 font-bold hover:bg-gray-600">
+        <div className="items-center justify-center h-full hidden md:block">
+          <button className="bg-black text-white px-2 py-6 hover:bg-gray-600">
             {navbarData.connectButtonText}
           </button>
         </div>
