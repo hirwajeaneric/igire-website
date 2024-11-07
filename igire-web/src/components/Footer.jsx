@@ -60,13 +60,13 @@ const Footer = () => {
 
                         {/* Tweets Section */}
                         <div className="md:w-1/3">
-                            <h4 className="font-semibold text-2xl">Tweets</h4>
-                            <p className="text-white text-xl">Stay tuned for our latest tweets and updates here.</p>
-                            <div className="text-white mt-4 text-xl">
+                            {/* <h4 className="font-semibold text-2xl">Tweets</h4>
+                            <p className="text-white text-xl">Stay tuned for our latest tweets and updates here.</p> */}
+                            {/* <div className="text-white mt-4 text-xl">
                                 {tweets.map((tweet, index) => (
                                     <p key={index}>{tweet}</p>
                                 ))}
-                            </div>
+                            </div> */}
                             {/* Social Icons */}
                             <div className="flex space-x-4 mt-4">
                                 <FaTwitter size={20} className="text-white hover:text-blue-300 cursor-pointer" />
