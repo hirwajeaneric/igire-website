@@ -1,5 +1,5 @@
 import { FaFacebookF, FaLinkedinIn, FaYoutube, FaTwitter } from 'react-icons/fa';
-import Container from '../components/container';
+import Container from './container';
 import { quickLinks, companyLinks, visionText, tweets } from '../fakeDatas/footerData';
 
 const Footer = () => {
