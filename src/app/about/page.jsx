@@ -3,6 +3,12 @@ import React from 'react';
 import AboutPageData from '@/fakeDatas/AboutPageFakes';
 import Image from 'next/image';
 import Link from 'next/link';
+import ImpactSection from "@/components/sections/impact.jsx";
+import Testimonials from '@/components/sections/Testimonials.jsx';
+import HomePageFakes from "@/fakeDatas/HomePageFakes"; 
+import Founders from "@/components/sections/Founders.jsx";
+import AboutPageFakes from "@/fakeDatas/AboutPageFakes"
+
 
 const AboutPage = () => {
   const { bannerData, topSection, programs, logos } = AboutPageData;
@@ -69,6 +75,15 @@ const AboutPage = () => {
               </div>
             </div>
           ))}
+        </div>
+        <div>
+          <ImpactSection ImpactData={HomePageFakes.ImpactData} />
+        </div>
+        <div>
+          <Testimonials testimonialsData={AboutPageFakes.testimonialsData} />
+        </div>
+        <div>
+           <Founders foundersData={AboutPageFakes.foundersData}/>
         </div>
       </div>
     </>
