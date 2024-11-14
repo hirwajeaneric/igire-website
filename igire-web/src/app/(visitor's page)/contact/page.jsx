@@ -12,7 +12,7 @@ import {
   LocateIcon,
 } from "lucide-react";
 import { ContactData } from "@/fakeDatas/ContactPageFakes";
-import DefaultBanner from "@/components/DefaultBanner";
+import DefaultBanner from "../components/DefaultBanner";
 
 export default function HeroSection() {
   const { imageSrc, imageAlt, title, description, buttonText } = heroData;
