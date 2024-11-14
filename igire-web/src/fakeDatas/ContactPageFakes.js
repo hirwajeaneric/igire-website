@@ -28,6 +28,10 @@ export const ContactData = {
   emailPlaceholder: "Your email address",
   phonePlaceholder: "Your phone number",
   messagePlaceholder: "Type your message here...",
-  LocateIcon:"MapPin"
+  LocateIcon:"MapPin",
+  bannerData: {
+    title: "Contact Us",
+    backgroundImage: "https://res.cloudinary.com/drfzbtbzi/image/upload/v1730473265/awe_landing_img.png",
+},
   
 };

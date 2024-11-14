@@ -7,8 +7,8 @@ export default function BlogPage() {
 
   return (
     
-    <div className="container mx-auto p-10 font-ibm">
-      <div className=" text-4xl text-center pb-6">Featured stories</div>
+    <div className="container mx-auto font-ibm">
+      <div className=" text-4xl font-extrabold text-center pb-10">Featured stories</div>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {Articles.map((article) => (
           <div key={article.id} className="bg-white rounded-lg shadow-md overflow-hidden group hover:shadow-lg transition-shadow duration-300">

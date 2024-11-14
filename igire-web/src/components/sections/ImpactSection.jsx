@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import HomePageData from "@/fakeDatas/HomePageFakes";
+import Image from "next/image";
 
 function ImpactStat({ number, description }) {
     return (
@@ -55,7 +56,7 @@ function ImpactImageSlider({ images }) {
                         key={index}
                         className="w-1/2 h-3/4 flex-shrink-0 transition-skew duration-100 ease-out"
                     >
-                        <img src={image.src} alt={image.alt} className="w-full h-full object-cover rounded-lg" />
+                        <Image src={image.src} width={100} height={100} alt={image.alt} className="w-full h-full object-cover rounded-lg" />
                     </div>
                 ))
             ) : (
@@ -82,13 +83,13 @@ function ImpactImageSlider({ images }) {
     );
 }
 
-export default function ImpactSection() {
+function ImpactSection() {
     const { impactStats, images } = HomePageData.ImpactData;
 
     return (
-        <section className="bg-black text-white py-20 font-ibm">
-            <div className="max-w-7xl mx-auto px-4">
-                <h2 className="text-2xl md:text-4xl font-bold mb-10">Our impact in numbers</h2>
+        <section className="bg-black text-white pt-20 pb-20 font-ibm">
+            <div className="max-w-screen-xl mx-auto px-4">
+                <h2 className="text-4xl text-center md:text-start font-bold mb-10">Our impact in numbers</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 text-xl gap-10 mb-12">
                     {impactStats.map((stat, index) => (
                         <ImpactStat key={index} number={stat.number} description={stat.description} />
@@ -99,3 +100,5 @@ export default function ImpactSection() {
         </section>
     );
 }
+
+export default ImpactSection

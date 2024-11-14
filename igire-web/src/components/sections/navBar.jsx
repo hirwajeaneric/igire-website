@@ -4,18 +4,21 @@ import React, { useState } from "react";
 import { IoIosSearch } from "react-icons/io";
 import { FaTimes } from "react-icons/fa";
 import { navbarData } from "../../fakeDatas/navbarData";
+import Image from "next/image";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <nav className="bg-white sticky top-0 z-50 flex justify-center px-6 py-6 shadow-md font-ibm w-full">
-      <div className=" flex justify-between w-full md:max-w-[90rem]">
+      <div className=" flex justify-between w-full md:max-w-screen-xl">
         <div className="flex items-center">
-          <img
+          <Image
             src={navbarData.logoSrc}
+            width={100}
+            height={100}
             alt={navbarData.logoAlt}
-            className="md:h-16 h-10"
+            className="md:h-20 h-10"
           />
           <div className="flex flex-col">
             <h2 className="text-sm">{navbarData.title1}</h2>
