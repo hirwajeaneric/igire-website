@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { IoIosSearch } from "react-icons/io";
 import { FaTimes } from "react-icons/fa";
-import { navbarData } from "../../fakeDatas/navbarData";
+import { navbarData } from "@/fakeDatas/navbarData";
 import Image from "next/image";
 
 export default function Navbar() {

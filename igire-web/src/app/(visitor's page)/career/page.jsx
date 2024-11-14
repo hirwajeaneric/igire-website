@@ -4,7 +4,7 @@ import { IoIosRefresh } from "react-icons/io";
 import { RiUserHeartLine } from "react-icons/ri";
 import { GiUpgrade } from "react-icons/gi";
 import { FaRegClock, FaArrowRight } from "react-icons/fa";
-import DefaultBanner from "@/components/DefaultBanner";
+import DefaultBanner from "../components/DefaultBanner";
 import CareerPageData from "@/fakeDatas/CareerPageData";
 
 const Page = () => {
