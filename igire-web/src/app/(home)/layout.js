@@ -1,10 +1,11 @@
-import SideBar from "./components/Sidebar";
+import Navbar from "./components/sections/navBar";
 import "@/globals.css";
 import { imb } from "@/utils/fonts";
+import Footer from "./components/Footer";
 
 export const metadata = {
-  title: "IRO Inventory management",
-  description: "IRO Inventory management",
+  title: "IRO",
+  description: "igire rwanda organisation website",
 };
 
 export default function RootLayout({ children }) {
@@ -13,8 +14,9 @@ export default function RootLayout({ children }) {
       <body
         className={`${imb}`}
       >
-        <SideBar />
+        <Navbar />
          {children}
+        { <Footer /> } 
       </body>
     </html>
   );
