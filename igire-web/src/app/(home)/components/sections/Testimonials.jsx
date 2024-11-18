@@ -81,7 +81,7 @@ const Testimonials = ({ testimonialsData }) => {
         <button
           type="button"
           onClick={prevTestimonials}
-          className="hs-carousel-prev flex items-center justify-center w-14 h-14 bg-black text-white rounded-full shadow-lg focus:outline-none"
+          className="hs-carousel-prev flex items-center justify-center w-14 h-14 bg-black text-white rounded-full shadow-lg focus:outline-none mt-20"
         >
           <span className="text-xl">‹</span>
           <span className="sr-only">Previous</span>
@@ -89,7 +89,7 @@ const Testimonials = ({ testimonialsData }) => {
         <button
           type="button"
           onClick={nextTestimonials}
-          className="hs-carousel-next flex items-center justify-center w-14 h-14 bg-black text-white rounded-full shadow-lg focus:outline-none"
+          className="hs-carousel-next flex items-center justify-center w-14 h-14 bg-black text-white rounded-full shadow-lg focus:outline-none mt-20"
         >
           <span className="text-xl">›</span>
           <span className="sr-only">Next</span>
