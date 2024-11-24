@@ -11,10 +11,14 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${imb}`}
+        className={`${imb} flex h-screen overflow-hidden`} // Flex container for sidebar and content
       >
+      
         <SideBar />
-         {children}
+
+        <main className="flex-grow overflow-auto bg-gray-100">
+          {children}
+        </main>
       </body>
     </html>
   );
