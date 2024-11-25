@@ -5,15 +5,13 @@ export default function HistoricalBackground({ HistoryBgData }) {
   const { title, description, btn, image } = HistoryBgData;
   return (
     <>
-      <div className="w-full flex justify-center items-start">
-        <div className="grid md:grid-cols-2 items-center max-w-screen-xl">
-          <div className="relative md:mb-0">
-            <div className="bg-black p-10 text-white rounded-tl-lg rounded-bl-lg font-ibm">
-              <h1 className="text-4xl font-bold mb-10">{title}</h1>
-              <p className="text-xl mb-10">{description}</p>
-            </div>
+      <div className="w-full flex justify-center items-start py-12 md:py-24">
+        <div className="grid grid-cols-1 lg:grid-cols-2 items-center max-w-screen-xl px-4">
+          <div className="flex flex-col gap-5 md:gap-10 mb-10">
+            <h2 className="text-4xl font-semibold">{title}</h2>
+            <p className="bg-green-950 text-white p-10 text-lg">{description}</p>
             <Link href="/about">
-              <button className="relative -bottom-6 bg-white text-black px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors flex items-center shadow-md font-ibm text-xl">
+              <button className="bg-white text-black font-semibold border border-black py-3 px-4 flex justify-between items-center">
                 {btn}
                 <svg
                   className="w-4 h-4 ml-2"
@@ -32,11 +30,9 @@ export default function HistoricalBackground({ HistoryBgData }) {
               </button>
             </Link>
           </div>
-          <div className="relative rounded-tr-lg rounded-br-lg mb-10 overflow-hidden">
-            {/* https://res.cloudinary.com/drfzbtbzi/image/upload/v1730473374/suceess-2.jpg */}
-            {/* Other content here */}
+          <div className="relative overflow-hidden ">
             {HistoryBgData.src ? (
-              <video src={HistoryBgData.src} controls autoPlay muted loop className="w-full h-[30rem] object-cover" />
+              <video src={HistoryBgData.src} controls autoPlay muted loop className="w-full object-cover" />
             ) : (
               <p className="text-red-500 font-ibm text-xl">
                 Video unavailable!

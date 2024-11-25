@@ -1,34 +1,27 @@
 import { RiArrowRightSLine } from "react-icons/ri";
 import { heroData } from "@/fakeDatas/heroData";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function HeroSection() {
+    const styles = {
+        backgroundImage: `url("/scc15.jpg")`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        height: '70vh',
+        display: 'flex',
+        justifyContent: 'center',
+    }
+
     return (
-        <section className="lg:flex lg:justify-center w-full mb-20">
-            <div className="w-full flex flex-col-reverse justify-center items-center md:flex-row md:container pb-20">
-              <div className="relative sm:text-center sm:gap-5 items-center md:text-start left-0 bottom-16 md:bottom-0 bg-black text-white flex flex-col justify-evenly px-10 py-32 w-[85%] md:w-[40%] md:left-12">
-                    <h2 className="text-lg md:text-4xl font-bold leading-tight">
-                         {heroData.title}
-                    </h2>
-                    <p className="text-sm">
-                         {heroData.description}
-                    </p>
-                    <button className="bg-white text-sm text-black hover:text-white flex items-center justify-center font-semibold w-full md:w-[70%] py-2 rounded-md hover:bg-gray-800 transition duration-300">
-                        {heroData.buttonText}
-                        <span className="ml-2 mt-1">
-                            <RiArrowRightSLine />
-                        </span>
-                    </button>
-              </div>
-              <div className="w-full md:w-[screen] md:border lg:border-0 xl:w-[90%]">
-                    <Image
-                        src={heroData.imageSrc}
-                        alt={heroData.imageAlt}
-                        width={10}
-                        height={10}
-                        className="w-full md:object-fill shadow-md"
-                    />
-              </div>
+        <section className="flex w-full flex-wrap md:flex-nowrap items-center max-w-screen-xl mx-auto relative">
+            <div className="flex flex-col gap-4 bg-orange-500 text-white w-full lg:w-1/2 mr-0 lg:-mr-48 h-fit px-5 py-16 lg:px-10 items-center lg:items-start z-40 ">
+                <h1 className="text-5xl text-center lg:text-left font-bold">Empowering Youth towards Economic Sustainability</h1>
+                <p className="text-lg text-center lg:text-left">See what we do to empower youth towards economic sustainability</p>
+                <Link href={'/programs'} className="bg-white text-orange-500 px-4 py-2 md:px-6 md:py-3 text-nowrap uppercase w-fit text-center font-semibold md:text-left">Our Programs</Link>
+            </div>
+            <div className="z-30 w-full lg:w-5/6" style={styles}>
+
             </div>
         </section>
     );
