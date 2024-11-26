@@ -302,8 +302,8 @@ export default function Stock() {
   return (
     <div className="w-full px-6">
       {/* Search and Filters */}
-      <div className="flex items-center justify-between mt-4 mb-3">
-        <p className="py-4 text-lg font-semibold">Stock Overview</p>
+      <div className="flex items-center justify-between mt-10 mb-3 font-ibm">
+        <p className="py-4 text-xl font-semibold">Stock Overview</p>
         <div className="relative max-w-lg">
           <HiOutlineSearch
             className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
@@ -342,7 +342,7 @@ export default function Stock() {
         </div>
       </div>
       {/* Table */}
-      <div className="rounded-md border bg-white">
+      <div className="rounded-md border bg-white mt-12">
         <Table>
           <TableHeader className="bg-[#EFF4FA]">
             {table.getHeaderGroups().map((headerGroup) => (

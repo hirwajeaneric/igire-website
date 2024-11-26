@@ -59,10 +59,10 @@ const CategoryList = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-8">
+    <div className="max-w-5xl mt-6 mx-auto p-8 ">
       {/* Title and Add Button */}
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-lg font-semibold text-black">Categories</h1>
+      <div className="flex justify-between items-center mb-10">
+        <h1 className="text-xl font-semibold text-black">Categories</h1>
         <Dialog>
           <DialogTrigger asChild>
             <Button className="bg-black text-white">Add Category</Button>

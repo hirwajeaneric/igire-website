@@ -4,7 +4,14 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { HiOutlineSearch } from "react-icons/hi";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { FaPlusCircle, FaEdit, FaTrash } from "react-icons/fa";
 
 const usersData = [
@@ -62,33 +69,31 @@ export default function Users() {
   };
 
   return (
-    <div className="space-y-6 p-10">
+    <div className="space-y-6 p-10 mt-5 font-ibm">
       {/* Title, Search, and Add Button Row */}
-      <div className="flex flex-row gap-12">
+      <div className="flex flex-row justify-between mb-20">
         <div>
-        <h2 className="text-xl font-semibold">Users</h2>
+          <h2 className="text-xl font-semibold">Users</h2>
         </div>
         <div className="flex  items-center">
-         
-          
-<HiOutlineSearch
-className="absolute ml-3 -z-1 text-gray-400"
-size={20}
-/>
-<input
-type="text"
-placeholder="Search user..."
-value={searchTerm}
+          <HiOutlineSearch
+            className="absolute ml-3 -z-1 text-gray-400"
+            size={20}
+          />
+          <input
+            type="text"
+            placeholder="Search user..."
+            value={searchTerm}
             onChange={handleSearch}
-className="border pl-10 pr-20 rounded-md py-2 w-s"
-/>
+            className="border pl-10 pr-20 rounded-md py-2 w-s"
+          />
         </div>
         <div>
           <a href="admin/addUser">
-        <Button className="flex items-center bg-black text-white">
-          <FaPlusCircle className="mr-2" /> Add User
-        </Button>
-        </a>
+            <Button className="flex items-center bg-black text-white">
+              <FaPlusCircle className="mr-2" /> Add User
+            </Button>
+          </a>
         </div>
       </div>
 

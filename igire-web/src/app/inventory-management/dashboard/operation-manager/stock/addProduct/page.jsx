@@ -65,10 +65,10 @@ const AddProductForm = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-8">
-      <div className="flex flex-row justify-between">
+    <div className="max-w-5xl mx-auto p-8 mt-12 md:mt-5">
+      <div className="flex flex-row justify-between font-ibm">
         <div>
-          <h1 className="text-lg font-semibold mb-6 text-center">Add New Product</h1>
+          <h1 className="text-xl font-semibold mb-6 text-center">Add New Product</h1>
         </div>
         <div>
           <Dialog>
@@ -113,7 +113,7 @@ const AddProductForm = () => {
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-8 bg-white border rounded-md p-12">
+      <form onSubmit={handleSubmit} className="space-y-8 border rounded-md p-12">
         {/* Product Information */}
         <section>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
