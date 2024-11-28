@@ -8,7 +8,7 @@ import Image from "next/image";
 function ImpactStat({ number, description }) {
     return (
         <div className="text-start font-ibm">
-            <p className="text-4xl font-bold text-gray-400">{number}</p>
+            <p className="text-5xl font-bold text-black">{number}</p>
             <p className="text-lg mt-2">{description}</p>
         </div>
     );
@@ -87,10 +87,10 @@ function ImpactSection() {
     const { impactStats, images } = HomePageData.ImpactData;
 
     return (
-        <section className="bg-black text-white pt-20 pb-20 font-ibm">
+        <section className="bg-orange-500 text-white py-12 md:py-24 font-ibm">
             <div className="max-w-screen-xl mx-auto px-4">
-                <h2 className="text-4xl text-center md:text-start font-bold mb-10">Our impact in numbers</h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 text-xl gap-10 mb-12">
+                <h2 className="text-4xl text-start font-semibold mb-10">Our impact in numbers</h2>
+                <div className="grid grid-cols-1 md:grid-cols-4 text-xl gap-10 mb-12">
                     {impactStats.map((stat, index) => (
                         <ImpactStat key={index} number={stat.number} description={stat.description} />
                     ))}

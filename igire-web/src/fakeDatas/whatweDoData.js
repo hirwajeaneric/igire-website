@@ -1,13 +1,15 @@
 export const sampleData = [
   {
     title: "SheCanCode Program",
-    description: "Our empowerment programs provide training and mentorship to young women, equipping them with essential skills.",
+    slug: "shecancode",
+    description: "SheCanCODE is an advanced computer programming coding Bootcamp for young women and girls in Rwanda; with its mission to promote diversity and inclusion in technology by promoting employment and innovation in the tech ecosystem.",
     buttonLabel: "Learn More",
     slideshowComponent: "Slideshow"
   },
   {
     title: "AWE Program",
-    description: "We offer comprehensive training in entrepreneurship, helping women start and manage their businesses.",
+    slug: "awe",
+    description: "The Academy for Women Entrepreneurs program was created to provide women with the knowledge, networks, and access they need to start and grow successful businesses. The AWE program is a flexible educational opportunity that combines the online platform DreamBuilder with locally provided content, mentoring, and facilitation. Through DreamBuilder, a cohort of women learn core business skills such as strategic planning, marketing and finance, and then discuss the material with local facilitators and business partners.",
     buttonLabel: "Join Now",
     slideshowComponent: "Slideshow2"
   },
@@ -19,7 +21,8 @@ export const getWhatWeDoData = () => {
     description: item.description,
     buttonLabel: item.buttonLabel,
     slideshowComponent: item.slideshowComponent,
+    slug: item.slug
   }));
 };
 // Paragraph data to be included
-export const paragraphData = "Igire Rwanda Organization is dedicated to empowering young girls and women, providing them with the skills, resources, and support they need to thrive. Through education, mentorship, and hands-on training programs, Igire Rwanda helps these women unlock their potential, fostering their confidence and capabilities to lead in their communities. By offering opportunities in areas like entrepreneurship, technology, and leadership, the organization accelerates their journey toward economic independence and personal growth. At Igire Rwanda, we believe that empowered women are key to building a brighter, more inclusive future for all.";
+export const paragraphData = "Igire Rwanda Organization is dedicated to empowering young girls and women, providing them with the skills, resources, and support they need to thrive. Through education, mentorship, and hands-on training programs, Igire Rwanda helps these women unlock their potential, fostering their confidence and capabilities to lead in their communities. ";

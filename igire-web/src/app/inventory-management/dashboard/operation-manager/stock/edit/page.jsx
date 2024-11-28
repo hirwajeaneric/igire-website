@@ -28,6 +28,8 @@ const AddProductForm = () => {
     },
   });
 
+
+
   const [newCategory, setNewCategory] = useState({ name: "", icon: "" });
   const [categories, setCategories] = useState(["electronics", "furniture", "stationery"]);
 
@@ -102,7 +104,7 @@ const AddProductForm = () => {
         </Dialog>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-8 bg-white border rounded-xl p-6">
+      <form onSubmit={handleSubmit} className="space-y-8 bg-white border rounded-md p-12">
         {/* Product Information Section */}
         <section>
           <h2 className="text-xl font-semibold mb-4">Product Information</h2>
@@ -200,13 +202,134 @@ const AddProductForm = () => {
               />
             </div>
           </div>
-          <div className="mt-8 w-full  ">
-          <Button className="bg-black w-full text-white ">Update </Button>
+          <div className="mt-8 justify-between flex ">
+          <Button className="bg-black text-white p-4">Update </Button>
         
         </div>
         </section>
 
-        
+        <Separator />
+
+        {/* Status and Condition Section */}
+        <section>
+          <h2 className="text-xl font-semibold mb-4">Status and Condition</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <Label htmlFor="status">Status</Label>
+              <Select
+                onValueChange={(value) => setFormData({ ...formData, status: value })}
+              >
+                <SelectTrigger className="w-full mt-1">
+                  {formData.status || "Select status"}
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="available">Available</SelectItem>
+                  <SelectItem value="borrowed">Borrowed</SelectItem>
+                  <SelectItem value="stolen">Stolen</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label htmlFor="condition">Condition</Label>
+              <Select
+                onValueChange={(value) => setFormData({ ...formData, condition: value })}
+              >
+                <SelectTrigger className="w-full mt-1">
+                  {formData.condition || "Select condition"}
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="new">New</SelectItem>
+                  <SelectItem value="used">Used</SelectItem>
+                  <SelectItem value="damaged">Damaged</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+           
+          </div>
+          <div className="mt-8 justify-between flex ">
+          <Button className="bg-black text-white p-4">Update status</Button>
+          <Button className="bg-black text-white p-4">Update condition</Button>
+        </div>
+        </section>
+
+        <Separator />
+
+        {/* Borrower Details Section */}
+        <section>
+          <h2 className="text-xl font-semibold mb-4">Borrower Details (Optional)</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <Label htmlFor="borrowerName">Borrower Name</Label>
+              <Input
+                id="borrowerName"
+                name="borrowerName"
+                type="text"
+                placeholder="Enter borrower name"
+                value={formData.borrowedBy.borrowerName}
+                onChange={handleChange}
+                className="mt-1"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="nationalId">National ID</Label>
+              <Input
+                id="nationalId"
+                name="nationalId"
+                type="text"
+                placeholder="Enter national ID"
+                value={formData.borrowedBy.nationalId}
+                onChange={handleChange}
+                className="mt-1"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="productId">Product ID</Label>
+              <Input
+                id="productId"
+                name="productId"
+                type="text"
+                placeholder="Enter product ID"
+                value={formData.borrowedBy.productId}
+                onChange={handleChange}
+                className="mt-1"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="borrowingDate">Borrowing Date</Label>
+                <Input
+                  id="borrowingDate"
+                  name="borrowingDate"
+                  type="date"
+                  value={formData.borrowedBy.borrowingDate}
+                  onChange={handleChange}
+                  className="mt-1"
+                />
+              </div>
+              <div>
+                <Label htmlFor="returningDate">Returning Date</Label>
+                <Input
+                  id="returningDate"
+                  name="returningDate"
+                  type="date"
+                  value={formData.borrowedBy.returningDate}
+                  onChange={handleChange}
+                  className="mt-1"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div className="mt-8 justify-between flex ">
+          <Button className="bg-black text-white p-4">Mark as borrowed</Button>
+          <Button className="bg-black text-white p-4">Mark as returned</Button>
+        </div>
       </form>
     </div>
   );

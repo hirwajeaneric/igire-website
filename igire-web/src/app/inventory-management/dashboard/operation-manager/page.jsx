@@ -1,22 +1,16 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts";
-import React, { useEffect, useState } from "react";
-import { MdDateRange } from "react-icons/md";
-import { AiOutlineClockCircle } from "react-icons/ai";
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from "recharts";
+import React, { useState } from "react";
 
 const Dashboard = () => {
   const stats = [
-    { title: "New products", value: "20", color: "bg-white", textColor: "text-green-900" },
-    { title: "Used products", value: "80", color: "bg-white", textColor: "text-yellow-700" },
-    { title: "Damaged products", value: "10", color: "bg-white", textColor: "text-red-700" },
+    { title: "Damaged products", value: "5", color: "bg-white", textColor: "text-red-900" },
+    { title: "Stolen products", value: "1", color: "bg-white", textColor: "text-red-700" },
+    { title: "Borrowed products", value: "2", color: "bg-white", textColor: "text-yellow-700" },
+    { title: "Available products", value: "78", color: "bg-white", textColor: "text-green-900" },
+
   ];
 
   const sales = [
@@ -28,49 +22,30 @@ const Dashboard = () => {
     { category: "stationery", value: "34" },
   ];
 
-  const chartData = [
-    { month: "January", desktop: 186 },
-    { month: "February", desktop: 305 },
-    { month: "March", desktop: 237 },
-    { month: "April", desktop: 73 },
-    { month: "May", desktop: 209 },
-    { month: "June", desktop: 214 },
-  ];
-
-  const chartConfig = {
-    desktop: {
-      label: "Products",
-    },
+  const data = {
+    "2024-01": [
+      { day: "1", damaged: 2, stolen: 1 },
+      { day: "2", damaged: 4, stolen: 0 },
+      { day: "3", damaged: 1, stolen: 2 },
+      { day: "4", damaged: 0, stolen: 0 },
+      { day: "5", damaged: 3, stolen: 0 },
+      { day: "6", damaged: 1, stolen: 1 },
+      // ... more days
+    ],
+    "2024-02": [
+      { day: "1", damaged: 3, stolen: 1 },
+      { day: "2", damaged: 2, stolen: 3 },
+      // ... more days
+    ],
   };
 
-  const DateTimeComponent = () => {
-    const [currentTime, setCurrentTime] = useState(new Date());
+  const [selectedYear, setSelectedYear] = useState("2024");
+  const [selectedMonth, setSelectedMonth] = useState("01");
 
-    useEffect(() => {
-      const interval = setInterval(() => {
-        setCurrentTime(new Date()); // Update the time every minute
-      }, 60000); // 60,000 ms = 1 minute
+  const handleYearChange = (e) => setSelectedYear(e.target.value);
+  const handleMonthChange = (e) => setSelectedMonth(e.target.value);
 
-      return () => clearInterval(interval); // Cleanup interval on component unmount
-    }, []);
-
-    const formattedTime = currentTime.toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-
-    return (
-      <div className="flex flex-row gap-2 text-xl font-semibold border rounded border-1 p-1 border-black items-center">
-        <div className="flex items-center">
-          <MdDateRange style={{ marginRight: "8px" }} />
-          <span>{currentTime.toLocaleDateString()}</span>
-        </div>
-        <div className="time-container">
-          <span>{formattedTime}</span>
-        </div>
-      </div>
-    );
-  };
+  const filteredData = data[`${selectedYear}-${selectedMonth}`] || [];
 
   return (
     <div className="p-10 space-y-6">
@@ -78,11 +53,42 @@ const Dashboard = () => {
         <div>
           <p className="font-semibold text-2xl">Dashboard</p>
         </div>
-        <DateTimeComponent />
+
+        {/* Year and Month Selectors */}
+        <div className="flex gap-4 items-center">
+          <select
+            value={selectedYear}
+            onChange={handleYearChange}
+            className="border p-2 rounded"
+          > 
+           <option value="2025">2023</option>
+            <option value="2024">2024</option>
+            <option value="2023">2023</option>
+            
+          </select>
+          <select
+            value={selectedMonth}
+            onChange={handleMonthChange}
+            className="border p-2 rounded"
+          >
+            <option value="01">January</option>
+            <option value="02">February</option>
+            <option value="03">March</option>
+            <option value="04">April</option>
+            <option value="05">May</option>
+            <option value="06">June</option>
+            <option value="07">July</option>
+            <option value="08">August</option>
+            <option value="09">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+          </select>
+        </div>
       </div>
 
       {/* Stats Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 ">
+      <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-4 gap-12 ">
         {stats.map((stat, index) => (
           <Card
             key={index}
@@ -103,30 +109,24 @@ const Dashboard = () => {
         <Card>
           <CardHeader>
             <CardTitle>Products Overview</CardTitle>
-            <CardDescription>January - June 2024</CardDescription>
+            <CardDescription>
+              {selectedYear} - {selectedMonth}
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            <ChartContainer config={chartConfig}>
-              <BarChart
-                data={chartData}
-                margin={{
-                  top: 20,
-                }}
-              >
-                <CartesianGrid vertical={false} />
-                <XAxis
-                  dataKey="month"
-                  tickLine={false}
-                  tickMargin={10}
-                  axisLine={false}
-                  tickFormatter={(value) => value.slice(0, 3)}
-                />
-                <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-                <Bar dataKey="desktop" radius={8}>
-                  <LabelList position="top" offset={12} className="fill-foreground" fontSize={12} />
-                </Bar>
-              </BarChart>
-            </ChartContainer>
+            <LineChart
+              width={500}
+              height={300}
+              data={filteredData}
+              margin={{ top: 20, right: 20, bottom: 20, left: 0 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="day" />
+              <YAxis />
+              <Tooltip />
+              <Line type="monotone" dataKey="damaged" stroke="#ff7300" />
+              <Line type="monotone" dataKey="stolen" stroke="#387908" />
+            </LineChart>
           </CardContent>
         </Card>
 

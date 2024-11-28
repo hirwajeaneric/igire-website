@@ -119,7 +119,7 @@ const SideBar = () => {
             isCollapsed={isSidebarCollapsed}
           />
           <SidebarLink
-            href="/settings"
+            href="/inventory-management/dashboard/operation-manager/settings"
             icon={SlidersHorizontal}
             label="Settings"
             isCollapsed={isSidebarCollapsed}

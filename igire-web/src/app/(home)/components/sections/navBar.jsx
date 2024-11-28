@@ -1,24 +1,25 @@
 "use client";
 
 import React, { useState } from "react";
-import { IoIosSearch } from "react-icons/io";
-import { FaTimes } from "react-icons/fa";
 import { navbarData } from "@/fakeDatas/navbarData";
 import Image from "next/image";
+import { MdClose } from "react-icons/md";
+import Link from "next/link";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="bg-white sticky top-0 z-50 flex justify-center px-6 py-6 shadow-md font-ibm w-full">
-      <div className="flex justify-between w-full md:max-w-screen-xl">
+    <nav className="bg-white sticky top-0 z-50 flex justify-center px-5 py-3 shadow-md font-ibm w-full">
+      <div className="flex justify-between items-center w-full md:max-w-screen-xl">
+        {/* Logo  */}
         <div className="flex items-center">
           <Image
             src={navbarData.logoSrc}
-            width={100}
-            height={100}
+            width={40}
+            height={40}
             alt={navbarData.logoAlt}
-            className="md:h-20 h-10"
+            className="w-14 lg:w-16"
           />
           <div className="flex flex-col">
             <h2 className="text-sm">{navbarData.title1}</h2>
@@ -26,7 +27,8 @@ export default function Navbar() {
           </div>
         </div>
 
-        <div className="hidden md:flex md:justify-center md:items-center mx- space-x-12  text-xl font-bold">
+        {/* Desktop Menu Buttons  */}
+        <div className="hidden md:hidden lg:flex justify-center items-center space-x-12 font-bold">
           {navbarData.links.map((link, index) => (
             <a
               key={index}
@@ -38,8 +40,9 @@ export default function Navbar() {
           ))}
         </div>
 
-        <div className="md:hidden flex items-center gap-4">
-          <button className="bg-black hover:bg-gray-600 text-white px-4 py-2 font-bold rounded">
+        {/* Mobile Menu Buttons  */}
+        <div className="lg:hidden flex items-center gap-8">
+          <button className="bg-black text-white px-6 py-3 lg:px-8 lg:py-4 hover:bg-gray-600">
             {navbarData.connectButtonText}
           </button>
           <button
@@ -47,7 +50,7 @@ export default function Navbar() {
             className="text-gray-800 focus:outline-none"
           >
             {isOpen ? (
-              <FaTimes className="h-6 w-6" />
+              <MdClose className="h-6 w-6" />
             ) : (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -67,8 +70,9 @@ export default function Navbar() {
           </button>
         </div>
 
+        {/* Mobile Menu Bar  */}
         {isOpen && (
-          <div className="md:hidden absolute top-16 left-0 right-0 bg-white shadow-md p-6">
+          <div className="lg:hidden absolute top-20 left-0 right-0 bg-white shadow-md p-6">
             <div className="flex flex-col space-y-10">
               {navbarData.links.map((link, index) => (
                 <a
@@ -83,11 +87,11 @@ export default function Navbar() {
           </div>
         )}
 
-        <div className="items-center justify-center h-full hidden md:block">
-          <button className="bg-black text-white px-2 py-6 hover:bg-gray-600">
-            {navbarData.connectButtonText}
-          </button>
-        </div>
+        {/* Connect Button  */}
+        <Link href={'/contact'} className="bg-black text-white hidden lg:flex px-6 py-3 hover:bg-gray-600">
+          {navbarData.connectButtonText}
+        </Link>
+
       </div>
     </nav>
   );

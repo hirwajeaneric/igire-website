@@ -56,7 +56,6 @@ export default function AddUser() {
               />
             </div>
 
-            {/* Last Name */}
             <div className="space-y-1">
               <Label htmlFor="lastName">Last Name</Label>
               <Input
