@@ -113,13 +113,13 @@ export default function Users() {
   };
 
   return (
-    <div className="space-y-6 p-10">
+    <div className="space-y-6 p-10 mt-5 font-ibm">
       {/* Title, Search, and Add Button Row */}
-      <div className="flex flex-row w-full justify-between">
+      <div className="flex flex-row justify-between mb-20">
         <div>
           <h2 className="text-xl font-semibold">Users</h2>
         </div>
-        <div className="flex items-center">
+        <div className="flex  items-center">
           <HiOutlineSearch
             className="absolute ml-3 -z-1 text-gray-400"
             size={20}

@@ -56,7 +56,7 @@ const SideBar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const sidebarClassName = `fixed flex flex-col ${
+  const sidebarClassName = `fixed flex flex-col font-ibm ${
     isSidebarCollapsed ? "w-16" : "w-64"
   } bg-white transition-all duration-500 overflow-hidden h-full shadow-md z-40 md:relative md:translate-x-0 ${
     isSidebarOpen ? "translate-x-0" : "-translate-x-full"
@@ -93,7 +93,7 @@ const SideBar = () => {
           
         </div>
         {/* LINKS */}
-        <div className="flex-grow mt-8">
+        <div className="flex-grow mt-20 text-xl">
           <SidebarLink
             href="/inventory-management/dashboard/operation-manager"
             icon={LayoutDashboard}

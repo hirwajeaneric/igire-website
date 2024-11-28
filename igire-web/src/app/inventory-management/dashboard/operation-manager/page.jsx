@@ -55,7 +55,7 @@ const Dashboard = () => {
         </div>
 
         {/* Year and Month Selectors */}
-        <div className="flex gap-4 items-center">
+        <div className="flex gap-2 items-center">
           <select
             value={selectedYear}
             onChange={handleYearChange}

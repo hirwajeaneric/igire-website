@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { FaSave } from "react-icons/fa";
 
 export default function AddUser() {
   const [formData, setFormData] = useState({
@@ -35,8 +34,8 @@ export default function AddUser() {
   };
 
   return (
-    <div className="flex justify-center mt-5">
-      <Card className="w-full max-w-lg border">
+    <div className="flex justify-center mt-40 font-ibm">
+      <Card className="w-full max-w-4xl border p-3">
         <CardHeader>
           <CardTitle className="text-xl">Add User</CardTitle>
         </CardHeader>
