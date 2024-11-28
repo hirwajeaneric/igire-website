@@ -1,23 +1,16 @@
+import Link from "next/link";
 import React from "react";
 
 const CallForAction = ({ CallForActionData }) => {
   const { title, description, btn } = CallForActionData;
   return (
-    <>
-      <div className="md:flex md:justify-center">
-        <div className="w-full border border-black py-5 md:py-[5rem] md:px-[10rem] text-center flex flex-col justify-center items-center gap-5 font-ibm">
-          <div>
-            <h2 className="text-4xl font-bold">{title}</h2>
-          </div>
-          <div className="max-w-screen-xl">
-            <p className="font-ibm text-xl">{description}</p>
-          </div>
-          <div>
-            <button className="bg-black text-white p-3 mr-5">{btn}</button>
-          </div>
-        </div>
+    <div className="md:flex md:justify-center py-12 md:py-24 px-4 bg-orange-500">
+      <div className="w-full text-center flex flex-col justify-center items-center gap-5 md:gap-10 font-ibm">
+        <h2 className="text-4xl font-bold">{title}</h2>
+        <p className="font-ibm text-lg w-full md:w-2/3">{description}</p>
+        <Link href="/contact" className="border-2 border-black text-black font-bold text-lg hover:bg-black hover:text-white px-4 py-2">Contact Us</Link>
       </div>
-    </>
+    </div>
   );
 };
 

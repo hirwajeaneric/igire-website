@@ -14,10 +14,10 @@ export default function Home() {
   return (
     <>
       <HeroSection />
-      <div className="flex flex-col gap-44">
-        <ImpactSection ImpactData={HomePageData.ImpactData} />
-        <Solution SolutionSectionData={HomePageData.SolutionSectionData} />
+      <div className="flex flex-col">
+        {/* <Solution SolutionSectionData={HomePageData.SolutionSectionData} /> */}
         <HistoricalBackground HistoryBgData={HomePageData.HistoryBgData}/>
+        <ImpactSection ImpactData={HomePageData.ImpactData} />
         <WhatWeDo />
         <Testimonials testimonialsData={AboutPageFakes.testimonialsData} />
         <BlogPage/>

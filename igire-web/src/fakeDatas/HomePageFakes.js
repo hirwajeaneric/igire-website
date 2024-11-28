@@ -1,7 +1,7 @@
 
 const HomePageData = {
     SolutionSectionData: {
-        description: "Committed to uplifting women in tech and business, we deliver a range of programs that address skills gaps, boost confidence, and nurture entrepreneurial spirit. We aim to support women as they build impactful careers.",
+        description: "Igire Rwanda Organization is dedicated to empowering young girls and women, providing them with the skills, resources, and support they need to thrive. Through education, mentorship, and hands-on training programs, Igire Rwanda helps these women unlock their potential, fostering their confidence and capabilities to lead in their communities.",
         btn1: "See Our Expertise",
         btn2: "Meet Our Team",
     },
@@ -12,7 +12,7 @@ const HomePageData = {
     },
     PartnersData: {
         title: "Trusted By",
-        description: "Join us as a partner and help empower women to thrive in tech and entrepreneurship. Your support enables us to bridge skills gaps, foster innovation, and inspire the next generation of leaders. Together, we can create lasting impact.",
+        description: "With our partners and hiring companies we provide you with the best training and career opportunities. We have collaborated with them through many areas such as sponsorships, trainings, apprenticeships and more.",
         companies: [
             { src: 'https://shecancode-website-dev.vercel.app/mastercard-logo.png', alt: 'Mastercard foundation logo' },
             { src: 'https://shecancode-website-dev.vercel.app/kalb.png', alt: 'Klab logo' },
@@ -30,16 +30,20 @@ const HomePageData = {
     ImpactData:{
         impactStats :[
             {
-                number: "571,000",
-                description: "Promoted young girls targeting in schools and STEM communities in tech.",
+                number: "8",
+                description: "Since we started providing trainings.",
             },
             {
-                number: "101,000",
-                description: "Connect young women with female professionals in the industry.",
+                number: "900+",
+                description: "Young women were given training in business and digital literacy accross Rwanda",
             },
             {
-                number: "98,700",
-                description: "Advocate for gender-neutral STEM curricula and materials.",
+                number: "700+",
+                description: "Young women got employed after training",
+            },
+            {
+                number: "4",
+                description: "Districts in which we have been working in.",
             },
         ],
     
