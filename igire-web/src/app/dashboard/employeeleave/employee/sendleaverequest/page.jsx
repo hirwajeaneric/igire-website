@@ -75,8 +75,8 @@ const RequestLeave = () => {
                         </SelectTrigger>
                         <SelectContent>
                             {leaveTypes.map((leave) => (
-                                <SelectItem key={leave.id} value={leave.name}>
-                                    {leave.name}
+                                <SelectItem key={leave.id} value={leave.leaveType}>
+                                    {leave.leaveType}
                                 </SelectItem>
                             ))}
                         </SelectContent>

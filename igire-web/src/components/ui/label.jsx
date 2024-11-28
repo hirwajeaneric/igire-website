@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -16,11 +17,3 @@ const Label = React.forwardRef(({ className, ...props }, ref) => (
 Label.displayName = LabelPrimitive.Root.displayName
 
 export { Label }
-
-export function Label({ htmlFor, children }) {
-  return (
-    <label htmlFor={htmlFor} className="block text-sm font-medium text-gray-700">
-      {children}
-    </label>
-  );
-}

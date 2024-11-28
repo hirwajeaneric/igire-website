@@ -3,7 +3,6 @@
 import React from 'react';
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { BsFillFileLockFill } from "react-icons/bs";
 
 const StatusCard = ({ title, value, icon }) => (
     <Card className="md:w-[calc(33.333%-0.75rem)]">

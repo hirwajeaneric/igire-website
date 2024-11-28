@@ -69,7 +69,8 @@ export default function RequestDetails({ request, leaveBalance, lastRequest }) {
                             {currentRequest.status}
                         </span>
                     </p> 
-                    <Button className="mt-6">Approve</Button>
+                    <Button className="mt-6 bg-green-200 text-black">Approve</Button>
+                    <Button className="mt-6 ml-3 bg-red-200 text-black">Decline</Button>
                 </div>
                
             </div>

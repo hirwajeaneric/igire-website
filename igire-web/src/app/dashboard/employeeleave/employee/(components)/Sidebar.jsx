@@ -50,14 +50,18 @@ const SideBar = () => {
         className={`fixed left-0 top-0 z-40 h-full bg-white shadow-md transition-transform transform ${isOpen ? "translate-x-0" : "-translate-x-full"
           } md:translate-x-0 w-64`}
       >
-        <div className="flex items-center gap-3 justify-start px-8 py-6">
-          <Image src={logo} alt="logo" width={50} height={50} />
-          <h1 className="text-2xl font-extrabold">Leave Hub</h1>
-        </div>
         <div>
-          <h3 className="flex items-center gap-3 text-md text-gray-500 justify-start px-8 py-6">
-            EMPLOYEE
-          </h3>
+          <div className="flex flex-col  ">
+            <div className="flex gap-3 items-center justify-start px-8 py-6">
+              <Image src={logo} alt="logo" width={50} height={50} />
+              <h1 className="text-2xl font-extrabold">Leave Hub</h1>
+            </div>
+            <div>
+              <h3 className="flex items-center gap-3 text-md underline underline-offset-4 text-green-700 justify-start px-8 pb-6">
+                Employee
+              </h3>
+            </div>
+          </div>
         </div>
         <div className="flex-grow">
           <SidebarLink
