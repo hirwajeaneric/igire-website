@@ -296,15 +296,15 @@ export default function Stock() {
     getPaginationRowModel: getPaginationRowModel(),
     initialState: {
       pagination: {
-        pageSize: 8,
+        pageSize: 5,
       },
     },
   });
 
   return (
-    <div className="w-full px-6">
+    <div className="w-full px-6 font-ibm">
       {/* Search and Filters */}
-      <div className="flex items-center justify-between mt-10 mb-3 font-ibm">
+      <div className="flex items-center justify-between mt-10 mb-3 ">
         <p className="py-4 text-xl font-semibold">Stock Overview</p>
         <div className="relative max-w-lg">
           <HiOutlineSearch

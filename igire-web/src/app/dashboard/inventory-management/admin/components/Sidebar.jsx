@@ -100,7 +100,7 @@ const SideBar = () => {
   </h3>
 </div>
         {/* LINKS */}
-        <div className="flex-grow mt-20 text-xl">
+        <div className="flex-grow mt-10 ">
           <SidebarLink
             href="/dashboard/inventory-management/admin"
             icon={User}

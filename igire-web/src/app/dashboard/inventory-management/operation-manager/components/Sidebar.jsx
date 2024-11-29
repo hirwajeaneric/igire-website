@@ -105,7 +105,7 @@ const SideBar = () => {
 </div>
 
         {/* LINKS */}
-        <div className="flex-grow mt-16 text-xl">
+        <div className="flex-grow mt-10  ">
           <SidebarLink
             href="/dashboard/inventory-management/operation-manager"
             icon={LayoutDashboard}
@@ -136,12 +136,12 @@ const SideBar = () => {
             label="Settings"
             isCollapsed={isSidebarCollapsed}
           />
-          <SidebarLink
+          {/* <SidebarLink
             href="/expenses"
             icon={CircleDollarSign}
             label="Expenses"
             isCollapsed={isSidebarCollapsed}
-          />
+          /> */}
         </div>
         {/* FOOTER */}
         <div className="block mb-10">

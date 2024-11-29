@@ -52,10 +52,10 @@ const Dashboard = () => {
   const filteredData = data[`${selectedYear}-${selectedMonth}`] || [];
 
   return (
-    <div className="p-10 space-y-6">
+    <div className="p-10 space-y-6 font-ibm">
       <div className="flex flex-row justify-between">
         <div>
-          <p className="font-semibold text-2xl">Dashboard</p>
+          <p className=" text-xl font-semibold ">Dashboard</p>
         </div>
 
         {/* Year and Month Selectors */}
