@@ -47,7 +47,7 @@ const SideBar = () => {
       </button>
 
       <div
-        className={`fixed left-0 top-0 z-40 h-full bg-white shadow-md transition-transform transform ${isOpen ? "translate-x-0" : "-translate-x-full"
+        className={`fixed left-0 top-0 flex flex-col z-40 h-full bg-white shadow-md transition-transform transform ${isOpen ? "translate-x-0" : "-translate-x-full"
           } md:translate-x-0 w-64`}
       >
         <div>
@@ -84,7 +84,7 @@ const SideBar = () => {
             label="Settings"
           />
         </div>
-        <div className="py-4 text-center text-xs text-gray-500">
+        <div className="px-8 mb-10 text-xs text-gray-500">
           &copy; 2024 igire rwanda org
         </div>
       </div>
