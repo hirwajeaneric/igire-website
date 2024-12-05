@@ -10,15 +10,21 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-
 export default function Page() {
   return (
-    <div className="flex h-screen w-full items-center justify-center px-4">
+    <div className="flex h-screen w-full items-center justify-center px-4"
+    style={{
+      backgroundImage: "url('/scc15.jpg')",
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+      backgroundRepeat: "no-repeat",
+      filter: "brightness(0.7)",
+    }}>
           <Card className="mx-auto max-w-sm">
       <CardHeader>
-        <CardTitle className="text-2xl">Login</CardTitle>
+        <CardTitle className="text-2xl">Create an account</CardTitle>
         <CardDescription>
-          Enter your email below to login to your account
+          Enter your email below to login to create your account
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -35,14 +41,12 @@ export default function Page() {
           <div className="grid gap-2">
             <div className="flex items-center">
               <Label htmlFor="password">Password</Label>
-              <Link href="resetPass" className="ml-auto inline-block text-sm underline">
-                Forgot your password?
-              </Link>
+              
             </div>
             <Input id="password" type="password" required />
           </div>
           <Button type="submit" className="w-full">
-            Login
+            Create account 
           </Button>
           
         </div>

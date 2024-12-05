@@ -30,6 +30,8 @@ import EditStock from "./EditStock";
 import DeleteStock from "./DeleteStock";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import { useRouter } from "next/navigation";
+
 
 const data = [
   {
@@ -130,11 +132,12 @@ const data = [
 export default function Stock() {
   const [productSearchTerm, setProductSearchTerm] = useState("");
   const [locationFilter, setLocationFilter] = useState("");
-  const [openEditDialog, setOpenEditDialog] = useState(false);
+  // const [openEditDialog, setOpenEditDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
 
-  
+  const router = useRouter();
+
   const filteredData = useMemo(() => {
     return data.filter(
       (item) =>
@@ -178,7 +181,7 @@ export default function Stock() {
 
     doc.save("Stock.pdf");
   };
-
+  
   const table = useReactTable({
     data: filteredData,
     columns: [
@@ -268,10 +271,9 @@ export default function Stock() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem
+              <DropdownMenuItem
                   onClick={() => {
-                    setSelectedRowData(row.original);
-                    setOpenEditDialog(true);
+                    router.push(`/dashboard/inventory-management/operation-manager/stock/edit?id=${row.original.id}`);
                   }}
                 >
                   Edit
@@ -294,15 +296,15 @@ export default function Stock() {
     getPaginationRowModel: getPaginationRowModel(),
     initialState: {
       pagination: {
-        pageSize: 8,
+        pageSize: 5,
       },
     },
   });
 
   return (
-    <div className="w-full px-6">
+    <div className="w-full px-6 font-ibm">
       {/* Search and Filters */}
-      <div className="flex items-center justify-between mt-10 mb-3 font-ibm">
+      <div className="flex items-center justify-between mt-10 mb-3 ">
         <p className="py-4 text-xl font-semibold">Stock Overview</p>
         <div className="relative max-w-lg">
           <HiOutlineSearch
@@ -344,7 +346,7 @@ export default function Stock() {
       {/* Table */}
       <div className="rounded-md border bg-white mt-12">
         <Table>
-          <TableHeader className="bg-[#EFF4FA]">
+          <TableHeader className="">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
@@ -397,7 +399,7 @@ export default function Stock() {
     <BiChevronRight size={20} className="" />
   </Button>
 </div>
-<EditStock
+{/* <EditStock
   open={openEditDialog}
   onOpenChange={setOpenEditDialog}
   selectedRowData={selectedRowData}
@@ -405,7 +407,7 @@ export default function Stock() {
     // Save logic goes here
     setOpenEditDialog(false);
   }}
-/>
+/> */}
 
 <DeleteStock
   open={openDeleteDialog}

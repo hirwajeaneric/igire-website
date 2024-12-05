@@ -34,7 +34,7 @@ export default function AddUser() {
   };
 
   return (
-    <div className="flex justify-center mt-40 font-ibm">
+    <div className="flex justify-center mt-4 font-ibm">
       <Card className="w-full max-w-4xl border p-3">
         <CardHeader>
           <CardTitle className="text-xl">Add User</CardTitle>
@@ -55,7 +55,6 @@ export default function AddUser() {
               />
             </div>
 
-            {/* Last Name */}
             <div className="space-y-1">
               <Label htmlFor="lastName">Last Name</Label>
               <Input

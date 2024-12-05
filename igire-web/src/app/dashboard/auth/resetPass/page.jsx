@@ -12,7 +12,14 @@ import { Label } from "@/components/ui/label";
 
 export default function ResetPassword() {
   return (
-    <div className="flex h-screen w-full items-center justify-center px-4">
+    <div className="flex h-screen w-full items-center justify-center px-4"
+    style={{
+      backgroundImage: "url('/scc15.jpg')",
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+      backgroundRepeat: "no-repeat",
+      filter: "brightness(0.7)",
+    }}>
       <Card className="mx-auto max-w-sm">
         <CardHeader>
           <CardTitle className="text-2xl">Forgot Password</CardTitle>

@@ -3,7 +3,7 @@
 import {
   Menu,
   LayoutDashboard,
-  Clipboard,
+  User,
   SlidersHorizontal,
   CircleDollarSign,
   Store
@@ -17,7 +17,7 @@ import logo from "@/favicon.ico";
 const SidebarLink = ({ href, icon: Icon, label, isCollapsed }) => {
   const pathname = usePathname();
 
-  // Active link condition
+  // Determine if the link is active
   const isActive =
     pathname === href || (pathname === "/" && href === "/dashboard");
 
@@ -43,7 +43,6 @@ const SidebarLink = ({ href, icon: Icon, label, isCollapsed }) => {
   );
 };
 
-
 const SideBar = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // For mobile screens
@@ -60,13 +59,13 @@ const SideBar = () => {
     isSidebarCollapsed ? "w-16" : "w-64"
   } bg-white transition-all duration-500 overflow-hidden h-full shadow-md z-40 md:relative md:translate-x-0 ${
     isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-  } md:flex md:max-w-sm`;
+  } md:flex md:w-sm`;
 
   return (
     <>
       {/* Mobile Hamburger Button */}
       <button
-        className="fixed top-4 left-4 z-50 p-2 bg-gray-100 rounded-full shadow-md md:hidden"
+        className="fixed top-4 left-4 z-50 p-2 bg-gray-100 rounded-full shadow-md md:hidden font-ibm"
         onClick={toggleMobileSidebar}
       >
         <Menu className="w-6 h-6 text-gray-700" />
@@ -90,32 +89,22 @@ const SideBar = () => {
           >
             Inventory management
           </h1>
-          
         </div>
+        <div className="flex pt-5 px-10 items-center"> 
+  <h3
+    className={`${
+      isSidebarCollapsed ? "hidden" : "block"
+    } text-xl  underline`}
+  >
+    Admin
+  </h3>
+</div>
         {/* LINKS */}
-        <div className="flex-grow mt-20 text-xl">
+        <div className="flex-grow mt-10 ">
           <SidebarLink
-            href="/inventory-management/dashboard/operation-manager"
-            icon={LayoutDashboard}
-            label="Dashboard"
-            isCollapsed={isSidebarCollapsed}
-          />
-          {/* <SidebarLink
-            href="/inventory"
-            icon={Archive}
-            label="Inventory"
-            isCollapsed={isSidebarCollapsed}
-          /> */}
-          <SidebarLink
-            href="/inventory-management/dashboard/operation-manager/stock"
-            icon={Store }
-            label="Stock"
-            isCollapsed={isSidebarCollapsed}
-          />
-          <SidebarLink
-            href="/inventory-management/dashboard/operation-manager/categories"
-            icon={Clipboard}
-            label="Categories"
+            href="/dashboard/inventory-management/admin"
+            icon={User}
+            label="Users"
             isCollapsed={isSidebarCollapsed}
           />
           <SidebarLink
@@ -124,13 +113,8 @@ const SideBar = () => {
             label="Settings"
             isCollapsed={isSidebarCollapsed}
           />
-          <SidebarLink
-            href="/expenses"
-            icon={CircleDollarSign}
-            label="Expenses"
-            isCollapsed={isSidebarCollapsed}
-          />
         </div>
+
         {/* FOOTER */}
         <div className="block mb-10">
           <p className="text-center text-xs text-gray-500">
@@ -138,6 +122,7 @@ const SideBar = () => {
           </p>
         </div>
       </div>
+
       {/* Overlay for mobile */}
       {isSidebarOpen && (
         <div
@@ -150,5 +135,3 @@ const SideBar = () => {
 };
 
 export default SideBar;
-
-

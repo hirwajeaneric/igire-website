@@ -6,8 +6,6 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectTrigger, SelectContent, SelectItem } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { FaPlusCircle } from "react-icons/fa";
-// ShadCN Dialog imports
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 
 const AddProductForm = () => {
@@ -30,12 +28,10 @@ const AddProductForm = () => {
     },
   });
 
-  const [newCategory, setNewCategory] = useState({
-    name: "",
-    icon: "",
-  });
 
-  const [categories, setCategories] = useState(["electronics", "furniture", "stationery"]); // example categories
+
+  const [newCategory, setNewCategory] = useState({ name: "", icon: "" });
+  const [categories, setCategories] = useState(["electronics", "furniture", "stationery"]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -54,70 +50,65 @@ const AddProductForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form Data Submitted:", formData);
-    // Add API integration or state update logic here
   };
 
   const addCategory = () => {
     if (newCategory.name) {
       setCategories([...categories, newCategory.name]);
-      setNewCategory({ name: "", icon: "" }); // reset category form
+      setNewCategory({ name: "", icon: "" });
     }
   };
 
   return (
-    <div className="max-w-5xl mx-auto p-8 mt-12 md:mt-5">
-      <div className="flex flex-row justify-between font-ibm">
-        <div>
-          <h1 className="text-xl font-semibold mb-6 text-center">Add New Product</h1>
-        </div>
-        <div>
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button className="bg-black text-white">Add Category</Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Add a New Category</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="categoryName">Category Name</Label>
-                  <Input
-                    id="categoryName"
-                    placeholder="Enter category name"
-                    value={newCategory.name}
-                    onChange={(e) =>
-                      setNewCategory({ ...newCategory, name: e.target.value })
-                    }
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="categoryIcon">Category Icon</Label>
-                  <Input
-                    id="categoryIcon"
-                    placeholder="Enter emoji or text icon"
-                    value={newCategory.icon}
-                    onChange={(e) =>
-                      setNewCategory({ ...newCategory, icon: e.target.value })
-                    }
-                  />
-                </div>
-                <DialogFooter>
-                  <Button onClick={addCategory} className="w-full bg-black text-white">
-                    Add Category
-                  </Button>
-                </DialogFooter>
+    <div className="max-w-4xl mx-auto p-8">
+      <div className="flex flex-row justify-between items-center mb-6">
+        <h1 className="text-lg font-semibold">Add New Product</h1>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button className="bg-black text-white">Add Category</Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Add a New Category</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="categoryName">Category Name</Label>
+                <Input
+                  id="categoryName"
+                  placeholder="Enter category name"
+                  value={newCategory.name}
+                  onChange={(e) =>
+                    setNewCategory({ ...newCategory, name: e.target.value })
+                  }
+                />
               </div>
-            </DialogContent>
-          </Dialog>
-        </div>
+              <div>
+                <Label htmlFor="categoryIcon">Category Icon</Label>
+                <Input
+                  id="categoryIcon"
+                  placeholder="Enter emoji or text icon"
+                  value={newCategory.icon}
+                  onChange={(e) =>
+                    setNewCategory({ ...newCategory, icon: e.target.value })
+                  }
+                />
+              </div>
+              <DialogFooter>
+                <Button onClick={addCategory} className="w-full bg-black text-white">
+                  Add Category
+                </Button>
+              </DialogFooter>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-8 border rounded-md p-12">
-        {/* Product Information */}
+      <form onSubmit={handleSubmit} className="space-y-8 bg-white border rounded-md p-12">
+        {/* Product Information Section */}
         <section>
+          <h2 className="text-xl font-semibold mb-4">Product Information</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Product Category */}
             <div>
               <Label htmlFor="category">Product Category</Label>
               <Select
@@ -136,7 +127,6 @@ const AddProductForm = () => {
               </Select>
             </div>
 
-            {/* Product Name */}
             <div>
               <Label htmlFor="name">Product Name</Label>
               <Input
@@ -150,7 +140,6 @@ const AddProductForm = () => {
               />
             </div>
 
-            {/* Brand */}
             <div>
               <Label htmlFor="brand">Brand</Label>
               <Input
@@ -164,7 +153,6 @@ const AddProductForm = () => {
               />
             </div>
 
-            {/* Dimensions */}
             <div>
               <Label htmlFor="dimensions">Dimensions</Label>
               <Input
@@ -178,7 +166,6 @@ const AddProductForm = () => {
               />
             </div>
 
-            {/* Location */}
             <div>
               <Label htmlFor="location">Location</Label>
               <Input
@@ -192,7 +179,6 @@ const AddProductForm = () => {
               />
             </div>
 
-            {/* Image */}
             <div>
               <Label htmlFor="image">Product Image</Label>
               <Input
@@ -204,16 +190,30 @@ const AddProductForm = () => {
                 className="mt-1"
               />
             </div>
+            <div>
+              <Label htmlFor="dateOfEntry">Date of Entry</Label>
+              <Input
+                id="dateOfEntry"
+                name="dateOfEntry"
+                type="date"
+                value={formData.dateOfEntry}
+                onChange={handleChange}
+                className="mt-1"
+              />
+            </div>
           </div>
+          <div className="mt-8 justify-between flex ">
+          <Button className="bg-black text-white p-4">Update </Button>
+        
+        </div>
         </section>
 
         <Separator />
 
-        {/* Product Status */}
+        {/* Status and Condition Section */}
         <section>
-          <h2 className="text-xl font-semibold mb-4">Product Status</h2>
+          <h2 className="text-xl font-semibold mb-4">Status and Condition</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Status */}
             <div>
               <Label htmlFor="status">Status</Label>
               <Select
@@ -230,7 +230,6 @@ const AddProductForm = () => {
               </Select>
             </div>
 
-            {/* Condition */}
             <div>
               <Label htmlFor="condition">Condition</Label>
               <Select
@@ -247,28 +246,20 @@ const AddProductForm = () => {
               </Select>
             </div>
 
-            {/* Date of Entry */}
-            <div>
-              <Label htmlFor="dateOfEntry">Date of Entry</Label>
-              <Input
-                id="dateOfEntry"
-                name="dateOfEntry"
-                type="date"
-                value={formData.dateOfEntry}
-                onChange={handleChange}
-                className="mt-1"
-              />
-            </div>
+           
           </div>
+          <div className="mt-8 justify-between flex ">
+          <Button className="bg-black text-white p-4">Update status</Button>
+          <Button className="bg-black text-white p-4">Update condition</Button>
+        </div>
         </section>
 
         <Separator />
 
-        {/* Borrower Details */}
+        {/* Borrower Details Section */}
         <section>
           <h2 className="text-xl font-semibold mb-4">Borrower Details (Optional)</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Borrower Name */}
             <div>
               <Label htmlFor="borrowerName">Borrower Name</Label>
               <Input
@@ -282,7 +273,6 @@ const AddProductForm = () => {
               />
             </div>
 
-            {/* National ID */}
             <div>
               <Label htmlFor="nationalId">National ID</Label>
               <Input
@@ -296,7 +286,6 @@ const AddProductForm = () => {
               />
             </div>
 
-            {/* Product ID */}
             <div>
               <Label htmlFor="productId">Product ID</Label>
               <Input
@@ -310,7 +299,6 @@ const AddProductForm = () => {
               />
             </div>
 
-            {/* Borrowing and Returning Dates */}
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="borrowingDate">Borrowing Date</Label>
@@ -338,8 +326,9 @@ const AddProductForm = () => {
           </div>
         </section>
 
-        <div className="mt-8">
-          <Button className="bg-black text-white w-full">Submit</Button>
+        <div className="mt-8 justify-between flex ">
+          <Button className="bg-black text-white p-4">Mark as borrowed</Button>
+          <Button className="bg-black text-white p-4">Mark as returned</Button>
         </div>
       </form>
     </div>
