@@ -10,19 +10,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useEffect, useState } from "react"
- 
-const Login = () =>{
-  const [email, setEmail] = useState([]);
-  const [password, setPassword] = useState([]);
-}
 
-useEffect(() => {
-  const fetchlogindata = async () =>{
-    try {
-      const token = localStorage.getToken("token")
-    }
-  };
-})
 
 export default function Page() {
   return (
