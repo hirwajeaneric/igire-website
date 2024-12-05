@@ -98,7 +98,7 @@ const columns = [
       const pathname = usePathname();
 
       return (
-        <a href="/dashboard/employeeleave/hr/leaverequest/requestdetails"><button
+        <a href="/dashboard/employeeleave/hr/leaverequest/receivedleaverequest/requestdetails"><button
           className="text-blue-500 hover:underline"
         >
           View Details

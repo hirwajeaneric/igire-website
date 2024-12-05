@@ -79,7 +79,7 @@ const columns = [
       const pathname = usePathname();
 
       return (
-        <a href="/dashboard/employeeleave/employee/receivedleaverequest/requestdetails"><button
+        <a href="/dashboard/employeeleave/employee/leaverequest/receivedleaverequest/requestdetails"><button
           className="text-blue-500 hover:underline"
         >
           View Details

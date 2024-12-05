@@ -22,6 +22,7 @@ import {
     getFilteredRowModel,
     useReactTable,
 } from "@tanstack/react-table";
+import { usePathname } from 'next/navigation';
 
 const StatusCard = ({ title, percentage, color }) => (
     <Card className="md:w-[calc(33.333%-0.75rem)]">
@@ -37,8 +38,8 @@ const data = [
         date: "21 Nov, 2024",
         name: "Liam Hayes",
         totalDays: 8,
-        startingDate: '24 Nov, 2024',
-        endDate: '2 Dec, 2024',
+        startingDate: "24 Nov, 2024",
+        endDate: "2 Dec, 2024",
         leaveType: "Sick",
         status: "Pending",
     },
@@ -46,8 +47,8 @@ const data = [
         date: "19 Nov, 2024",
         name: "Noah Bennett",
         totalDays: 5,
-        startingDate: '30 Nov, 2024',
-        endDate: '6 Dec, 2024',
+        startingDate: "30 Nov, 2024",
+        endDate: "6 Dec, 2024",
         leaveType: "Paternity",
         status: "Pending",
     },
@@ -55,36 +56,64 @@ const data = [
         date: "19 Nov, 2024",
         name: "Ethan Miller",
         totalDays: 5,
-        startingDate: '30 Nov, 2024',
-        endDate: '6 Dec, 2024',
+        startingDate: "30 Nov, 2024",
+        endDate: "6 Dec, 2024",
         leaveType: "Paternity",
         status: "Pending",
     },
 ];
 
 const columns = [
-    { accessorKey: "date", header: "Date" },
-    { accessorKey: "name", header: "Name" },
-    { accessorKey: "totalDays", header: "Total days" },
-    { accessorKey: "startingDate", header: "Start Date" },
-    { accessorKey: "endDate", header: "End Date" },
-    { accessorKey: "leaveType", header: "Leave type" },
+    {
+        accessorKey: "date",
+        header: () => "Date",
+    },
+    {
+        accessorKey: "name",
+        header: () => "Full Name",
+    },
+    {
+        accessorKey: "totalDays",
+        header: () => "Total days",
+    },
+    {
+        accessorKey: "startingDate",
+        header: () => "Start Date",
+    },
+    {
+        accessorKey: "endDate",
+        header: () => "End Date",
+    },
+    {
+        accessorKey: "leaveType",
+        header: "Leave type",
+    },
     {
         accessorKey: "status",
-        header: "Status",
+        header: () => "Status",
         cell: ({ row }) => {
             const status = row.getValue("status");
-            const statusClass =
-                status === "Approved" ? "text-green-500" : status === "Declined" ? "text-red-500" : "text-yellow-500";
-            return <span className={statusClass}>{status}</span>;
+            let statusClass = "text-yellow-500";
+            if (status === "Approved") statusClass = "text-green-500";
+            if (status === "Declined") statusClass = "text-red-500";
+
+            return <div className={statusClass}>{status}</div>;
         },
     },
     {
         accessorKey: "actions",
         header: "Actions",
-        cell: ({ row }) => (
-            <Button className='bg-gray-200 text-black hover:text-white' onClick={() => handleViewDetails(row.original)}>View Details</Button>
-        ),
+        cell: ({ row }) => {
+            const pathname = usePathname();
+
+            return (
+                <a href="/dashboard/employeeleave/hr/leaverequest/requestdetails"><button
+                    className="text-blue-500 hover:underline"
+                >
+                    View Details
+                </button></a>
+            );
+        },
     },
 ];
 
@@ -113,9 +142,9 @@ export default function Dashboard() {
                 <StatusCard title="Declined application" percentage="2" />
             </div>
 
-            <div className="w-full">
+            <div className="w-full sm:p-6 p-2">
                 <div className="flex flex-col sm:flex-row sm:items-center items-start gap-3 justify-between mb-3">
-                    <h1 className="text-xl font-semibold">New Leave request</h1>
+                    <h1 className="text-xl font-semibold">New Request</h1>
                     <div className="relative w-80">
                         <Input
                             placeholder="Search by name..."
@@ -134,7 +163,10 @@ export default function Dashboard() {
                                 <TableRow key={headerGroup.id}>
                                     {headerGroup.headers.map((header) => (
                                         <TableHead key={header.id}>
-                                            {flexRender(header.column.columnDef.header, header.getContext())}
+                                            {flexRender(
+                                                header.column.columnDef.header,
+                                                header.getContext()
+                                            )}
                                         </TableHead>
                                     ))}
                                 </TableRow>
@@ -146,7 +178,10 @@ export default function Dashboard() {
                                     <TableRow key={row.id}>
                                         {row.getVisibleCells().map((cell) => (
                                             <TableCell key={cell.id}>
-                                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                                {flexRender(
+                                                    cell.column.columnDef.cell,
+                                                    cell.getContext()
+                                                )}
                                             </TableCell>
                                         ))}
                                     </TableRow>
@@ -161,7 +196,6 @@ export default function Dashboard() {
                         </TableBody>
                     </Table>
                 </div>
-
                 <div className="flex items-center justify-end space-x-2 py-2">
                     <Button
                         onClick={() => table.previousPage()}

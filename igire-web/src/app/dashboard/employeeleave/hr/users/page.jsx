@@ -5,6 +5,7 @@ import { IoIosAddCircleOutline } from "react-icons/io";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { HiOutlineSearch } from "react-icons/hi";
+import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 import {
     flexRender,
     getCoreRowModel,
@@ -38,6 +39,30 @@ const columns = [
     { accessorKey: "joinedOn", header: "Joined On" },
     { accessorKey: "leavebalance", header: "Leave balance" },
     { accessorKey: "status", header: "Status", cell: ({ row }) => <div className="text-green-600 bg-green-100 px-2 py-1 rounded-full">{row.getValue("status")}</div> },
+    {
+        accessorKey: "actions",
+        header: "Action",
+        cell: ({ row }) => (
+            <div className="flex gap-2">
+                <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-green-600"
+                    onClick={() => handleEdit(row.original)}
+                >
+                    <AiFillEdit />
+                </Button>
+                <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-red-600"
+                    onClick={() => handleDelete(row.original)}
+                >
+                    <AiFillDelete />
+                </Button>
+            </div>
+        ),
+    },
 ];
 
 const ManageUsers = () => {
