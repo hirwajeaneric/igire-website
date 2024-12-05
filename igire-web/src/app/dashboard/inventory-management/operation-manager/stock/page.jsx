@@ -303,101 +303,101 @@ export default function Stock() {
 
   return (
     <div className="w-full px-6 font-ibm">
-      {/* Search and Filters */}
-      <div className="flex items-center justify-between mt-10 mb-3 ">
-        <p className="py-4 text-xl font-semibold">Stock Overview</p>
-        <div className="relative max-w-lg">
-          <HiOutlineSearch
-            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-            size={20}
-          />
-          <input
-            type="text"
-            placeholder="Search product..."
-            value={productSearchTerm}
-            onChange={(e) => setProductSearchTerm(e.target.value)}
-            className="border pl-10 pr-20 rounded-md py-2 w-full"
-          />
-        </div>
-        <div className="flex space-x-2">
-          <select
-            className="border px-1 text-[15px] py-2 rounded-md"
-            value={locationFilter}
-            onChange={(e) => setLocationFilter(e.target.value)}
-          >
-            <option value="">Filter Location</option>
-            <option value="Class 1">Class 1</option>
-            <option value="Class 2">Class 2</option>
-            <option value="Office">Office</option>
-          </select>
-          <button
-            onClick={handleExportPDF}
-            className="flex items-center text-[15px] px-1 py-2 border rounded-md bg-white"
-          >
-            <FaFileDownload className="mr-1" /> <span>Download</span>
-          </button>
-          <a href="stock/addProduct">
-            <button className="flex items-center px-1 py-2 text-[15px] border rounded-md bg-black text-white">
-              <FaPlusCircle className="mr-1" /> <span>Add stock</span>
-            </button>
-          </a>
-        </div>
-      </div>
-      {/* Table */}
-      <div className="rounded-md border bg-white mt-12">
-        <Table>
-          <TableHeader className="">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
-                ))}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id}>
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(
-                      cell.column.columnDef.cell,
-                      cell.getContext()
+  {/* Search and Filters */}
+  <div className="flex flex-col sm:flex-row items-center justify-between mt-14 md:mt-10 mb-3 space-y-4 sm:space-y-0">
+    <p className="py-4 text-xl font-semibold">Stock Overview</p>
+    <div className="relative max-w-lg w-full sm:w-auto">
+      <HiOutlineSearch
+        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+        size={20}
+      />
+      <input
+        type="text"
+        placeholder="Search product..."
+        value={productSearchTerm}
+        onChange={(e) => setProductSearchTerm(e.target.value)}
+        className="border pl-10 pr-20 rounded-md py-2 w-full"
+      />
+    </div>
+    <div className="flex space-x-2">
+      <select
+        className="border px-1 text-[15px] py-2 rounded-md"
+        value={locationFilter}
+        onChange={(e) => setLocationFilter(e.target.value)}
+      >
+        <option value="">Filter Location</option>
+        <option value="Class 1">Class 1</option>
+        <option value="Class 2">Class 2</option>
+        <option value="Office">Office</option>
+      </select>
+      <button
+        onClick={handleExportPDF}
+        className="flex items-center text-[15px] px-1 py-2 border rounded-md bg-white"
+      >
+        <FaFileDownload className="mr-1 sm:mr-0" />
+        <span className="hidden sm:inline">Download</span>
+      </button>
+      <a href="stock/addProduct">
+        <button className="flex items-center px-1 py-2 text-[15px] border rounded-md bg-black text-white">
+          <FaPlusCircle className="mr-1 sm:mr-0" />
+          <span className="hidden sm:inline">Add stock</span>
+        </button>
+      </a>
+    </div>
+  </div>
+
+  {/* Table Container for Scroll */}
+  <div className="rounded-md border bg-white mt-12 ">
+    <Table className="min-w-[600px]">
+      <TableHeader>
+        {table.getHeaderGroups().map((headerGroup) => (
+          <TableRow key={headerGroup.id}>
+            {headerGroup.headers.map((header) => (
+              <TableHead key={header.id}>
+                {header.isPlaceholder
+                  ? null
+                  : flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
                     )}
-                  </TableCell>
-                ))}
-              </TableRow>
+              </TableHead>
             ))}
-          </TableBody>
-        </Table>
-      </div>
-      {/* Pagination */}
-      <div className="flex items-center justify-end mt-4">
-  <Button
-    onClick={() => table.previousPage()}
-    disabled={!table.getCanPreviousPage()}
-    className="px-1 py-1 flex items-center"
-  >
-    <BiChevronLeft size={20} className="" />
-  </Button>
-  <span className="mx-2">
-    Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
-  </span>
-  
-  <Button
-    onClick={() => table.nextPage()}
-    disabled={!table.getCanNextPage()}
-    className="px-1 py-1 flex items-center"
-  >
-    <BiChevronRight size={20} className="" />
-  </Button>
+          </TableRow>
+        ))}
+      </TableHeader>
+      <TableBody>
+        {table.getRowModel().rows.map((row) => (
+          <TableRow key={row.id}>
+            {row.getVisibleCells().map((cell) => (
+              <TableCell key={cell.id}>
+                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              </TableCell>
+            ))}
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  </div>
+
+  {/* Pagination */}
+  <div className="flex items-center justify-end mt-4">
+    <Button
+      onClick={() => table.previousPage()}
+      disabled={!table.getCanPreviousPage()}
+      className="px-1 py-1 flex items-center"
+    >
+      <BiChevronLeft size={20} />
+    </Button>
+    <span className="mx-2">
+      Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+    </span>
+    <Button
+      onClick={() => table.nextPage()}
+      disabled={!table.getCanNextPage()}
+      className="px-1 py-1 flex items-center"
+    >
+      <BiChevronRight size={20} />
+    </Button>
 </div>
 {/* <EditStock
   open={openEditDialog}

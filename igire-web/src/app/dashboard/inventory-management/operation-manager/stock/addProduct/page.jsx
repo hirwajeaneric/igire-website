@@ -80,17 +80,8 @@ const AddProductForm = () => {
                   }
                 />
               </div>
-              <div>
-                <Label htmlFor="categoryIcon">Category Icon</Label>
-                <Input
-                  id="categoryIcon"
-                  placeholder="Enter emoji or text icon"
-                  value={newCategory.icon}
-                  onChange={(e) =>
-                    setNewCategory({ ...newCategory, icon: e.target.value })
-                  }
-                />
-              </div>
+             
+              
               <DialogFooter>
                 <Button onClick={addCategory} className="w-full bg-black text-white">
                   Add Category
@@ -200,7 +191,7 @@ const AddProductForm = () => {
             </div>
           </div>
           <div className="mt-8 w-full  ">
-          <Button className="bg-black w-full text-white ">Update </Button>
+          <Button className="bg-black w-full text-white ">Add </Button>
         
         </div>
         </section>
