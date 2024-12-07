@@ -11,14 +11,13 @@ const API_BASE_URL = "https://iro-website-bn-1.onrender.com";
 const AddProductForm = () => {
   const [formData, setFormData] = useState({
     prod_id: "",
-    category: "",
+    categoryId: "",
     name: "",
     brand: "",
     dimensions: "",
     location: "",
-    status: "available",
-    condition: "new",
-    dateOfEntry: "",
+    status: "available", 
+    condition: "new", 
     image: null,
   });
 
@@ -26,7 +25,7 @@ const AddProductForm = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Fetch categories from API
+
   useEffect(() => {
     const fetchCategories = async () => {
       setLoading(true);
@@ -40,7 +39,7 @@ const AddProductForm = () => {
 
         const response = await fetch(`${API_BASE_URL}/api/Inventory/category/getAll`, {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`, // Send the token in headers
           },
         });
 
@@ -49,12 +48,9 @@ const AddProductForm = () => {
         }
 
         const data = await response.json();
-        console.log("API Response:", data);
-
         if (Array.isArray(data)) {
           setCategories(data);
         } else {
-          console.log("Categories not found in API response");
           setCategories([]);
         }
       } catch (err) {
@@ -69,10 +65,6 @@ const AddProductForm = () => {
     fetchCategories();
   }, []);
 
-  useEffect(() => {
-    console.log("Categories state updated:", categories);
-  }, [categories]);
-
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === "image") {
@@ -82,41 +74,58 @@ const AddProductForm = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
 
-    const productData = new FormData();
-    productData.append("prod_id", formData.prod_id);
-    productData.append("name", formData.name);
-    productData.append("brand", formData.brand);
-    productData.append("dimensions", formData.dimensions);
-    productData.append("categoryId", formData.category);
-    productData.append("location", formData.location);
-    productData.append("status", formData.status);
-    productData.append("condition", formData.condition);
+  const productData = new FormData();
+  productData.append("prod_id", formData.prod_id);
+  productData.append("name", formData.name);
+  productData.append("brand", formData.brand);
+  productData.append("dimensions", formData.dimensions);
+  productData.append("categoryId", formData.categoryId);
+  productData.append("location", formData.location);
+  productData.append("status", formData.status);
+  productData.append("condition", formData.condition);
+  if (formData.image) {
     productData.append("productImage", formData.image);
+  }
 
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/Inventory/product/create-product`, {
-        method: "POST",
-        body: productData,
-      });
+  
+  console.log("Submitting Product Data:");
 
-      if (response.ok) {
-        alert("Product added successfully!");
-      } else {
-        const error = await response.json();
-        alert(`Failed to add product: ${error.message}`);
-        console.error("Error:", error);
-      }
-    } catch (err) {
-      alert("An error occurred. Please try again.");
-      console.error("Error:", err);
-    } finally {
-      setLoading(false);
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      throw new Error("Authentication token is missing or invalid.");
     }
-  };
+    console.log("Form Data before submission:", formData);
+    console.log("token:", token);
+
+
+    const response = await fetch(`${API_BASE_URL}/api/Inventory/product/create-product`, {
+      method: "POST",
+      body: productData,
+      headers: {
+        Authorization: `Bearer ${token}`, // Ensure the token is included in the header
+      },
+    });
+
+    if (response.ok) {
+      alert("Product added successfully!");
+    } else {
+      const error = await response.json();
+      alert(`Failed to add product: ${error.message}`);
+      console.error("Error:", error);
+    }
+  } catch (err) {
+    alert("An error occurred. Please try again.");
+    console.error("Error:", err);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="max-w-4xl mx-auto p-8">
@@ -143,14 +152,14 @@ const AddProductForm = () => {
             </div>
 
             <div>
-              <Label htmlFor="category">Product Category</Label>
+              <Label htmlFor="categoryId">Product Category</Label>
               <Select
-                onValueChange={(value) => setFormData({ ...formData, category: value })}
-                value={formData.category}
+                onValueChange={(value) => setFormData({ ...formData, categoryId: value })}
+                value={formData.categoryId}
               >
                 <SelectTrigger className="w-full mt-1">
-                  {formData.category
-                    ? categories.find((cat) => cat._id === formData.category)?.categoryName || "Select category"
+                  {formData.categoryId
+                    ? categories.find((cat) => cat._id === formData.categoryId)?.categoryName || "Select category"
                     : "Select category"}
                 </SelectTrigger>
                 <SelectContent>
@@ -236,18 +245,6 @@ const AddProductForm = () => {
                 className="mt-1"
               />
             </div>
-
-            <div>
-              <Label htmlFor="dateOfEntry">Date of Entry</Label>
-              <Input
-                id="dateOfEntry"
-                name="dateOfEntry"
-                type="date"
-                value={formData.dateOfEntry}
-                onChange={handleChange}
-                className="mt-1"
-              />
-            </div>
           </div>
 
           <div className="mt-8 w-full">
@@ -262,4 +259,3 @@ const AddProductForm = () => {
 };
 
 export default AddProductForm;
-
