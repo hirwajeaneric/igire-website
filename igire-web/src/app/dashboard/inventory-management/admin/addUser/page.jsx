@@ -1,19 +1,15 @@
 "use client";
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function AddUser() {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    phoneNumber: "",
+    name: "",
+    userId: "",
     email: "",
-    password: "",
     role: "",
   });
 
@@ -22,61 +18,82 @@ export default function AddUser() {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleRoleChange = (value) => {
-    setFormData({ ...formData, role: value });
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Add form submission logic here
-    console.log("User Data:", formData);
-    alert("User added successfully!");
+  
+    const token = localStorage.getItem("token");  // Get token from local storage
+  
+    console.log("Form Data:", formData);
+    console.log("Token:", token);
+  
+    if (!token) {
+      alert("No token found, please log in.");
+      return;
+    }
+  
+    try {
+      const response = await fetch("https://iro-website-bn-1.onrender.com/api/Inventory/users/create-user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,  // Include the token in the Authorization header
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          userId: formData.userId,
+          email: formData.email,
+          role: formData.role,
+        }),
+      });
+  
+      console.log("Response Status:", response.status);
+  
+      // Check if the response is OK before calling .json()
+      if (!response.ok) {
+        throw new Error(`Failed to create user. Status: ${response.status}`);
+      }
+  
+      const data = await response.json();  // Read the response body as JSON
+      alert("User added successfully!");
+      console.log("Response Data:", data);  // Log the response data for debugging
+  
+    } catch (error) {
+      console.error("Error in fetch:", error);
+      alert(`Failed to add user: ${error.message}`);
+    }
   };
-
+  
   return (
     <div className="flex justify-center mt-4 font-ibm">
-      <Card className="w-full max-w-4xl border p-3">
+      <Card className="w-full max-w-2xl border p-3">
         <CardHeader>
           <CardTitle className="text-xl">Add User</CardTitle>
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-3">
-            {/* First Name */}
+            {/* Name */}
             <div className="space-y-1">
-              <Label htmlFor="firstName">First Name</Label>
+              <Label htmlFor="name">Name</Label>
               <Input
-                id="firstName"
-                name="firstName"
+                id="name"
+                name="name"
                 type="text"
-                placeholder="Enter first name"
-                value={formData.firstName}
+                placeholder="Enter name"
+                value={formData.name}
                 onChange={handleChange}
                 required
               />
             </div>
 
+            {/* User ID */}
             <div className="space-y-1">
-              <Label htmlFor="lastName">Last Name</Label>
+              <Label htmlFor="userId">User ID</Label>
               <Input
-                id="lastName"
-                name="lastName"
+                id="userId"
+                name="userId"
                 type="text"
-                placeholder="Enter last name"
-                value={formData.lastName}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            {/* Phone Number */}
-            <div className="space-y-1">
-              <Label htmlFor="phoneNumber">Phone Number</Label>
-              <Input
-                id="phoneNumber"
-                name="phoneNumber"
-                type="tel"
-                placeholder="Enter phone number"
-                value={formData.phoneNumber}
+                placeholder="Enter user ID"
+                value={formData.userId}
                 onChange={handleChange}
                 required
               />
@@ -96,33 +113,18 @@ export default function AddUser() {
               />
             </div>
 
-            {/* Password */}
-            <div className="space-y-1">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                placeholder="Enter password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
             {/* Role */}
             <div className="space-y-1">
               <Label htmlFor="role">Role</Label>
-              <Select onValueChange={handleRoleChange} defaultValue="" required>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a role" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="admin">Admin</SelectItem>
-                  <SelectItem value="manager">Manager</SelectItem>
-                  <SelectItem value="staff">Staff</SelectItem>
-                </SelectContent>
-              </Select>
+              <Input
+                id="role"
+                name="role"
+                type="text"
+                placeholder="Enter role (e.g.,admin, Operations Manager)"
+                value={formData.role}
+                onChange={handleChange}
+                required
+              />
             </div>
           </CardContent>
           <CardFooter>
@@ -130,7 +132,6 @@ export default function AddUser() {
               type="submit"
               className="w-full flex items-center justify-center bg-black text-white"
             >
-              {/* <FaSave className="mr-2" /> */}
               Save User
             </Button>
           </CardFooter>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { HiOutlineSearch } from "react-icons/hi";
 import { FaPlusCircle, FaFileDownload } from "react-icons/fa";
 import { MdMoreHoriz } from "react-icons/md";
@@ -32,146 +32,62 @@ import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { useRouter } from "next/navigation";
 
-
-const data = [
-  {
-    id: 1,
-    category: "Furniture",
-    name: "Table",
-    brand: "Product A",
-    dimensions: "5x3 ft",
-    location: "Class 1",
-    status: "Available",
-    condition: "New",
-    dateOfEntry: "2023-09-01",
-    image: "https://via.placeholder.com/100",
-  },
-  {
-    id: 2,
-    category: "Electronics",
-    name: "Projector",
-    brand: "Brand B",
-    dimensions: "12x8 in",
-    location: "Office",
-    status: "Borrowed",
-    condition: "Used",
-    dateOfEntry: "2023-09-15",
-    borrowedBy: {
-      borrowerName: "Jane Smith",
-      nationalId: "987654321",
-      productId: "002",
-      borrowingDate: "2023-11-01",
-      returningDate: "2023-11-10",
-    },
-    image: "https://via.placeholder.com/100",
-  },
-  {
-    id: 1,
-    category: "Furniture",
-    name: "Table",
-    brand: "Product A",
-    dimensions: "5x3 ft",
-    location: "Class 1",
-    status: "Available",
-    condition: "New",
-    dateOfEntry: "2023-09-01",
-    image: "https://via.placeholder.com/100",
-  },
-  {
-    id: 2,
-    category: "Electronics",
-    name: "Projector",
-    brand: "Brand B",
-    dimensions: "12x8 in",
-    location: "Office",
-    status: "Borrowed",
-    condition: "Used",
-    dateOfEntry: "2023-09-15",
-    borrowedBy: {
-      borrowerName: "Jane Smith",
-      nationalId: "987654321",
-      productId: "002",
-      borrowingDate: "2023-11-01",
-      returningDate: "2023-11-10",
-    },
-    image: "https://via.placeholder.com/100",
-  },
-  {
-    id: 1,
-    category: "Furniture",
-    name: "Table",
-    brand: "Product A",
-    dimensions: "5x3 ft",
-    location: "Class 1",
-    status: "Available",
-    condition: "New",
-    dateOfEntry: "2023-09-01",
-    image: "https://via.placeholder.com/100",
-  },
-  {
-    id: 2,
-    category: "Electronics",
-    name: "Projector",
-    brand: "Brand B",
-    dimensions: "12x8 in",
-    location: "Office",
-    status: "Borrowed",
-    condition: "Used",
-    dateOfEntry: "2023-09-15",
-    borrowedBy: {
-      borrowerName: "Jane Smith",
-      nationalId: "987654321",
-      productId: "002",
-      borrowingDate: "2023-11-01",
-      returningDate: "2023-11-10",
-    },
-    image: "https://via.placeholder.com/100",
-  },
-];
-
 export default function Stock() {
+  const [products, setProducts] = useState([]);
   const [productSearchTerm, setProductSearchTerm] = useState("");
   const [locationFilter, setLocationFilter] = useState("");
-  // const [openEditDialog, setOpenEditDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
 
   const router = useRouter();
 
+  useEffect(() => {
+    fetch("https://iro-website-bn-1.onrender.com/api/Inventory/users")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Fetched products:", product.data); 
+        if (data) {
+          setUsers(data); 
+          setFilteredUsers(data); 
+        }
+      })
+      .catch((error) => console.error("Error fetching products:", error));
+  }, []);
+
+  
   const filteredData = useMemo(() => {
-    return data.filter(
+    return products.filter(
       (item) =>
         item.name.toLowerCase().includes(productSearchTerm.toLowerCase()) &&
         (locationFilter === "" || item.location.includes(locationFilter))
     );
-  }, [productSearchTerm, locationFilter]);
+  }, [productSearchTerm, locationFilter, products]);
 
+  // Export to PDF
   const handleExportPDF = () => {
     const doc = new jsPDF();
     const tableHeaders = [
-      "ID",
-      "Category",
+      "Product ID",
       "Name",
       "Brand",
       "Dimensions",
+      "Category",
       "Location",
       "Status",
       "Condition",
-      "Date of Entry",
-      "Borrower Name",
+      "Image",
     ];
 
-    const rows = data.map((item) => [
-      item.id || "N/A",
-      item.category || "N/A",
+    const rows = products.map((item) => [
+      item.prod_id || "N/A",
       item.name || "N/A",
       item.brand || "N/A",
       item.dimensions || "N/A",
+      item.categoryId || "N/A",
       item.location || "N/A",
       item.status || "N/A",
       item.condition || "N/A",
-      item.dateOfEntry || "N/A",
-      item.borrowedBy?.borrowerName || "N/A",
+      item.productImage || "N/A",
     ]);
 
     doc.autoTable({
@@ -181,22 +97,21 @@ export default function Stock() {
 
     doc.save("Stock.pdf");
   };
-  
+
   const table = useReactTable({
     data: filteredData,
     columns: [
       {
-        accessorKey: "id",
-        header: "ID",
-        cell: ({ row }) => <div>{row.original.id}</div>,
+        accessorKey: "prod_id",
+        header: "Product ID",
       },
       {
-        accessorKey: "image",
+        accessorKey: "productImage",
         header: "Image",
         cell: ({ row }) => (
           <div>
             <img
-              src={row.original.image}
+              src={row.original.productImage}
               alt={row.original.name}
               style={{ width: "50px", height: "50px", objectFit: "cover" }}
             />
@@ -204,34 +119,24 @@ export default function Stock() {
         ),
       },
       {
-        accessorKey: "category",
-        header: "Category",
-        cell: ({ row }) => <div>{row.original.category}</div>,
-      },
-      {
         accessorKey: "name",
         header: "Name",
-        cell: ({ row }) => <div>{row.original.name}</div>,
       },
       {
         accessorKey: "brand",
         header: "Brand",
-        cell: ({ row }) => <div>{row.original.brand}</div>,
       },
       {
         accessorKey: "dimensions",
         header: "Dimensions",
-        cell: ({ row }) => <div>{row.original.dimensions}</div>,
       },
       {
         accessorKey: "location",
         header: "Location",
-        cell: ({ row }) => <div>{row.original.location}</div>,
       },
       {
         accessorKey: "status",
         header: "Status",
-        cell: ({ row }) => <div>{row.original.status}</div>,
       },
       {
         accessorKey: "condition",
@@ -239,56 +144,42 @@ export default function Stock() {
         cell: ({ row }) => {
           const condition = row.original.condition;
           const getColor = () => {
-            if (condition === "New") return "text-green-600";
-            if (condition === "Used") return "text-yellow-600";
-            if (condition === "Damaged") return "text-red-600";
+            if (condition === "new") return "text-green-600";
+            if (condition === "used") return "text-yellow-600";
+            if (condition === "damaged") return "text-red-600";
             return "text-gray-600";
           };
           return <div className={getColor()}>{condition}</div>;
         },
       },
       {
-        accessorKey: "dateOfEntry",
-        header: "Date of Entry",
-        cell: ({ row }) => <div>{row.original.dateOfEntry}</div>,
-      },
-      {
-        accessorKey: "borrowedBy.borrowerName",
-        header: "Borrower Name",
-        cell: ({ row }) => (
-          <div>{row.original.borrowedBy?.borrowerName || "N/A"}</div>
-        ),
-      },
-      {
         id: "actions",
         header: "Actions",
         cell: ({ row }) => (
-          <div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="ml-auto">
-                  <MdMoreHoriz size={20} />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="ml-auto">
+                <MdMoreHoriz size={20} />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
               <DropdownMenuItem
-                  onClick={() => {
-                    router.push(`/dashboard/inventory-management/operation-manager/stock/edit?id=${row.original.id}`);
-                  }}
-                >
-                  Edit
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => {
-                    setSelectedRowData(row.original);
-                    setOpenDeleteDialog(true);
-                  }}
-                >
-                  Delete
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+                onClick={() => {
+                  router.push(`/edit/${row.original.prod_id}`);
+                }}
+              >
+                Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  setSelectedRowData(row.original);
+                  setOpenDeleteDialog(true);
+                }}
+              >
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         ),
       },
     ],

@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { HiOutlineSearch } from "react-icons/hi";
+import { AiFillEdit, AiFillDelete } from "react-icons/ai";
 import {
     flexRender,
     getCoreRowModel,
@@ -22,32 +23,100 @@ import {
     TableRow,
 } from "@/components/ui/table";
 
-const data = [
-    { name: "Johnny Scott", employeeId: "IRO_EMP_0012", position: "Project Manager", joinedOn: "2024-11-10", leavebalance: "0", status: "Active" },
-    { name: "Milton Doe", employeeId: "IRO_EMP_0013", position: "Operations", joinedOn: "2024-10-10", leavebalance: "1.5", status: "Active" },
-    { name: "Shawn Den", employeeId: "IRO_EMP_0046", position: "HR", joinedOn: "2021-03-03", leavebalance: "16", status: "Active" },
-    { name: "Carol Reed", employeeId: "IRO_EMP_0029", position: "Volunteer", joinedOn: "2021-03-03", leavebalance: "12.5", status: "Active" },
-    { name: "Danny Wood", employeeId: "IRO_EMP_0014", position: "Research", joinedOn: "2021-03-04", leavebalance: "9", status: "Active" },
-    { name: "Shawn Martin", employeeId: "IRO_EMP_0069", position: "Finance", joinedOn: "2021-03-04", leavebalance: "5.5", status: "Active" },
-];
-
 const columns = [
     { accessorKey: "employeeId", header: "Employee ID" },
-    { accessorKey: "name", header: "Full Name" },
+    {
+        accessorKey: "firstName",
+        header: "Full Name",
+        cell: ({ row }) => row.original.firstName,
+    },
+    {
+        accessorKey: "lastName",
+        header: "Full Name",
+        cell: ({ row }) => row.original.lastName,
+    },
     { accessorKey: "position", header: "Position" },
     { accessorKey: "joinedOn", header: "Joined On" },
-    { accessorKey: "leavebalance", header: "Leave balance" },
-    { accessorKey: "status", header: "Status", cell: ({ row }) => <div className="text-green-600 bg-green-100 px-2 py-1 rounded-full">{row.getValue("status")}</div> },
+    { accessorKey: "leaveBalance", header: "Leave Balance" },
+    {
+        accessorKey: "status",
+        header: "Status",
+        cell: ({ row }) => (
+            <div className={`text-${row.original.status === 'Active' ? 'green' : 'red'}-600 bg-${row.original.status === 'Active' ? 'green' : 'red'}-100 px-2 py-1 rounded-full`}>
+                {row.original.status}
+            </div>
+        ),
+    },
+    {
+        accessorKey: "actions",
+        header: "Action",
+        cell: ({ row }) => (
+            <div className="flex gap-2">
+                <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-green-600"
+                    onClick={() => handleEdit(row.original)}
+                >
+                    <AiFillEdit />
+                </Button>
+                <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-red-600"
+                    onClick={() => handleDelete(row.original)}
+                >
+                    <AiFillDelete />
+                </Button>
+            </div>
+        ),
+    },
 ];
 
 const ManageUsers = () => {
     const [searchTerm, setSearchTerm] = useState("");
-    const [globalFilter, setGlobalFilter] = useState("");
-    const [users, setUsers] = useState(data);
+    const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    const filteredData = users.filter(user => user.name.toLowerCase().includes(searchTerm.toLowerCase()));
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                setLoading(true);
+                const response = await fetch('https://iro-employee-bn.onrender.com/getAll/employee', {
+                    method: 'GET',
+                    headers: {
+                        accept: 'application/json',
+                    },
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const data = await response.json();
+                const formattedData = data.employees.map((employee) => ({
+                    employeeId: employee?.employeeID,
+                    firstName: employee?.firstName,
+                    lastName: employee?.lastName,
+                    position: employee?.position,
+                    joinedOn: new Date(employee?.createdAt).toLocaleDateString(),
+                    leaveBalance: employee?.leaveBalance || 0,
+                    status: employee.status,
+                }));
+                setUsers(formattedData);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-    const [sorting, setSorting] = useState([]);
+        fetchUsers();
+    }, []);
+
+    const filteredData = users.filter(user =>
+        user.fullName.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     const table = useReactTable({
         data: filteredData,
         columns,
@@ -55,37 +124,39 @@ const ManageUsers = () => {
         getPaginationRowModel: getPaginationRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
-        onSortingChange: setSorting,
         state: {
-            sorting,
-            globalFilter,
+            globalFilter: searchTerm,
         },
     });
 
     return (
-        <>
-            <div className="p-2 sm:p-6 flex flex-col gap-5">
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                    <p className="text-xl font-semibold">Manage Users</p>
-                    <div className="relative sm:w-80 w-full">
-                        <Input
-                            placeholder="Search user..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="pl-10"
-                        />
-                        <HiOutlineSearch className="absolute left-3 top-1/2 transform -translate-y-1/2" />
-                    </div>
-                    <span >
-                        <a href='/dashboard/employeeleave/hr/users/adduser'><Button className="flex gap-2 text-white">
-                            Add User
-                            <IoIosAddCircleOutline />
-                        </Button></a>
-                    </span>
+        <div className="p-2 sm:p-6 flex flex-col gap-5">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <p className="text-xl font-semibold">Manage Users</p>
+                <div className="relative sm:w-80 w-full">
+                    <Input
+                        placeholder="Search user..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="pl-10"
+                    />
+                    <HiOutlineSearch className="absolute left-3 top-1/2 transform -translate-y-1/2" />
                 </div>
+                <a href="/dashboard/employeeleave/hr/users/adduser">
+                    <Button className="flex gap-2 text-white">
+                        Add User
+                        <IoIosAddCircleOutline />
+                    </Button>
+                </a>
+            </div>
 
-                <div className="w-full">
-                    <div className="rounded-md border">
+            <div className="w-full">
+                <div className="rounded-md border">
+                    {loading ? (
+                        <p className="text-center py-4">Loading...</p>
+                    ) : error ? (
+                        <p className="text-center py-4 text-red-600">Error: {error}</p>
+                    ) : (
                         <Table>
                             <TableHeader className="bg-[#EFF4FA]">
                                 {table.getHeaderGroups().map((headerGroup) => (
@@ -111,15 +182,15 @@ const ManageUsers = () => {
                                     ))
                                 ) : (
                                     <TableRow>
-                                        <TableCell colSpan={6}>No data found</TableCell>
+                                        <TableCell colSpan={columns.length}>No data found</TableCell>
                                     </TableRow>
                                 )}
                             </TableBody>
                         </Table>
-                    </div>
+                    )}
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 

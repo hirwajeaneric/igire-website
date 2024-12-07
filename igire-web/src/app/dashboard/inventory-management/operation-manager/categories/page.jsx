@@ -1,8 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { IoWarning } from "react-icons/io5";
 import {
   Dialog,
@@ -12,81 +11,152 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
+import CreateCategory from "./CreateCategory";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-const initialCategories = [
-  { id: 1, name: "Furniture" },
-  { id: 2, name: "Electronics" },
-  { id: 3, name: "Welfare" },
-  { id: 4, name: "Stationery" },
-];
+const API_BASE_URL = "https://iro-website-bn-1.onrender.com";
 
-const CategoryList = () => {
-  const [categories, setCategories] = useState(initialCategories);
-  const [newCategory, setNewCategory] = useState({ name: "" });
+const CategoriesPage = () => {
+  const [categories, setCategories] = useState([]);
   const [editCategory, setEditCategory] = useState(null);
   const [removeCategoryId, setRemoveCategoryId] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Add a new category
-  const addCategory = () => {
-    if (newCategory.name.trim()) {
-      setCategories([...categories, { id: Date.now(), name: newCategory.name }]);
-      setNewCategory({ name: "" });
+  // Fetch categories from API
+  useEffect(() => {
+    const fetchCategories = async () => {
+      setLoading(true);
+      setError(null);
+  
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error("Unauthorized. Please log in.");
+        }
+  
+        const response = await fetch(`${API_BASE_URL}/api/Inventory/category/getAll`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!response.ok) {
+          throw new Error("Failed to fetch categories.");
+        }
+        const data = await response.json();
+  
+        if (Array.isArray(data)) {
+          setCategories(data);
+          console.log("Fetched categories:", data); 
+        } else {
+          throw new Error("Unexpected data format from API.");
+        }
+      } catch (err) {
+        console.error("Error fetching categories:", err.message); 
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    fetchCategories();
+  }, []);
+  
+
+  const addCategory = (newCategory) => {
+    setCategories((prevCategories) => [...prevCategories, newCategory]);
+  };
+
+  const updateCategory = async () => {
+    if (editCategory && editCategory.categoryName.trim()) {
+      try {
+        setLoading(true);
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error("Unauthorized. Please log in.");
+        }
+
+        const response = await fetch(
+          `${API_BASE_URL}/api/Inventory/category/update/${editCategory._id}`,
+          {
+            method: "PUT",
+            headers: { 
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ categoryName: editCategory.categoryName }),
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to update category.");
+        }
+
+        const updatedCategory = await response.json();
+        setCategories((prevCategories) =>
+          prevCategories.map((category) =>
+            category._id === editCategory._id ? updatedCategory : category
+          )
+        );
+        setEditCategory(null);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
-  // Remove a category
-  const removeCategory = () => {
-    if (removeCategoryId !== null) {
-      setCategories(categories.filter((category) => category.id !== removeCategoryId));
-      setRemoveCategoryId(null);
+  const removeCategory = async () => {
+    if (removeCategoryId) {
+      try {
+        setLoading(true);
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error("Unauthorized. Please log in.");
+        }
+
+        const response = await fetch(
+          `${API_BASE_URL}/api/Inventory/category/delete/${removeCategoryId}`,
+          { 
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to delete category.");
+        }
+
+        setCategories((prevCategories) =>
+          prevCategories.filter((category) => category._id !== removeCategoryId)
+        );
+        setRemoveCategoryId(null);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
-  // Update an edited category
-  const updateCategory = () => {
-    if (editCategory.name.trim()) {
-      setCategories(
-        categories.map((category) =>
-          category.id === editCategory.id ? editCategory : category
-        )
-      );
-      setEditCategory(null);
-    }
-  };
+  if (loading) {
+    return <p>Loading categories...</p>;
+  }
+
+  if (error) {
+    return <p className="text-red-500">{error}</p>;
+  }
 
   return (
     <div className="max-w-5xl mt-6 mx-auto p-8">
-      {/* Title and Add Button */}
       <div className="flex justify-between items-center mt-5 md:mt-0 mb-10">
         <h1 className="text-xl font-semibold text-black">Categories</h1>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button className="bg-black ml-2 text-white">Add Category</Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Add a New Category</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="categoryName">Category Name</Label>
-                <Input
-                  id="categoryName"
-                  placeholder="Enter category name"
-                  value={newCategory.name}
-                  onChange={(e) => setNewCategory({ name: e.target.value })}
-                />
-              </div>
-              <Button onClick={addCategory} className="w-full bg-black text-white">
-                Add Category
-              </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
+        <CreateCategory addCategory={addCategory} />
       </div>
-
-      {/* Categories Table */}
       <table className="w-full table-auto border-collapse border border-gray-300">
         <thead className="bg-gray-200">
           <tr>
@@ -97,11 +167,10 @@ const CategoryList = () => {
         </thead>
         <tbody>
           {categories.map((category) => (
-            <tr key={category.id} className="hover:bg-gray-100">
-              <td className="border border-gray-300 px-4 py-2">{category.id}</td>
-              <td className="border border-gray-300 px-4 py-2">{category.name}</td>
+            <tr key={category._id} className="hover:bg-gray-100">
+              <td className="border border-gray-300 px-4 py-2">{category._id}</td>
+              <td className="border border-gray-300 px-4 py-2">{category.categoryName}</td>
               <td className="border border-gray-300 px-4 py-2 text-center">
-                {/* Edit Button */}
                 <Dialog>
                   <DialogTrigger asChild>
                     <Button
@@ -117,33 +186,26 @@ const CategoryList = () => {
                       <DialogTitle>Edit Category</DialogTitle>
                     </DialogHeader>
                     <div className="space-y-4">
-                      <div>
-                        <Label htmlFor="editCategoryName">Category Name</Label>
-                        <Input
-                          id="editCategoryName"
-                          placeholder="Enter new category name"
-                          value={editCategory?.name || ""}
-                          onChange={(e) =>
-                            setEditCategory({ ...editCategory, name: e.target.value })
-                          }
-                        />
-                      </div>
-                      <Button
-                        onClick={updateCategory}
-                        className="w-full bg-black text-white"
-                      >
+                      <Label htmlFor="editCategoryName">Category Name</Label>
+                      <Input
+                        id="editCategoryName"
+                        placeholder="Enter new category name"
+                        value={editCategory?.categoryName || ""}
+                        onChange={(e) =>
+                          setEditCategory({ ...editCategory, categoryName: e.target.value })
+                        }
+                      />
+                      <Button onClick={updateCategory} className="w-full bg-black text-white">
                         Update Category
                       </Button>
                     </div>
                   </DialogContent>
                 </Dialog>
-
-                {/* Remove Button */}
                 <Dialog>
                   <DialogTrigger asChild>
                     <Button
                       size="sm"
-                      onClick={() => setRemoveCategoryId(category.id)}
+                      onClick={() => setRemoveCategoryId(category._id)}
                       className="bg-red-500 text-white mx-1"
                     >
                       Delete
@@ -185,4 +247,4 @@ const CategoryList = () => {
   );
 };
 
-export default CategoryList;
+export default CategoriesPage;

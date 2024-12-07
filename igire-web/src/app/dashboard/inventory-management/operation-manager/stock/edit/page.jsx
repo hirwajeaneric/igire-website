@@ -6,8 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectTrigger, SelectContent, SelectItem } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-
+import CreateCategory from "../../categories/createCategory";
 const AddProductForm = () => {
   const [formData, setFormData] = useState({
     category: "",
@@ -63,35 +62,7 @@ const AddProductForm = () => {
     <div className="max-w-4xl mx-auto p-8">
       <div className="flex flex-row justify-between items-center mb-6">
         <h1 className="text-lg font-semibold">Add New Product</h1>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button className="bg-black text-white">Add Category</Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Add a New Category</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="categoryName">Category Name</Label>
-                <Input
-                  id="categoryName"
-                  placeholder="Enter category name"
-                  value={newCategory.name}
-                  onChange={(e) =>
-                    setNewCategory({ ...newCategory, name: e.target.value })
-                  }
-                />
-              </div>
-             
-              <DialogFooter>
-                <Button onClick={addCategory} className="w-full bg-black text-white">
-                  Add Category
-                </Button>
-              </DialogFooter>
-            </div>
-          </DialogContent>
-        </Dialog>
+        <CreateCategory addCategory={addCategory} />
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-8 bg-white border rounded-md p-12">
