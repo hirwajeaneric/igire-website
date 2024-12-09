@@ -2,7 +2,12 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select, SelectTrigger, SelectContent, SelectItem } from "@/components/ui/select";
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import CreateCategory from "../../categories/CreateCategory";
 
@@ -16,15 +21,14 @@ const AddProductForm = () => {
     brand: "",
     dimensions: "",
     location: "",
-    status: "available", 
-    condition: "new", 
-    image: null,
+    status: "available", // Default value
+    condition: "new", // Default value
+    productImage: "",
   });
 
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -37,22 +41,22 @@ const AddProductForm = () => {
           throw new Error("Unauthorized. Please log in.");
         }
 
-        const response = await fetch(`${API_BASE_URL}/api/Inventory/category/getAll`, {
-          headers: {
-            Authorization: `Bearer ${token}`, // Send the token in headers
-          },
-        });
+        const response = await fetch(
+          `${API_BASE_URL}/api/Inventory/category/getAll`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (!response.ok) {
-          throw new Error("Failed to fetch categories.");
+          const errorDetails = await response.json();
+          throw new Error(errorDetails.message || "Failed to fetch categories.");
         }
 
         const data = await response.json();
-        if (Array.isArray(data)) {
-          setCategories(data);
-        } else {
-          setCategories([]);
-        }
+        setCategories(Array.isArray(data) ? data : []);
       } catch (err) {
         console.error("Error fetching categories:", err);
         setError(err.message);
@@ -67,65 +71,63 @@ const AddProductForm = () => {
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    if (name === "image") {
-      setFormData({ ...formData, image: files[0] });
+    if (name === "productImage" && files) {
+      setFormData({ ...formData, productImage: URL.createObjectURL(files[0]) });
     } else {
       setFormData({ ...formData, [name]: value });
     }
   };
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
 
-  const productData = new FormData();
-  productData.append("prod_id", formData.prod_id);
-  productData.append("name", formData.name);
-  productData.append("brand", formData.brand);
-  productData.append("dimensions", formData.dimensions);
-  productData.append("categoryId", formData.categoryId);
-  productData.append("location", formData.location);
-  productData.append("status", formData.status);
-  productData.append("condition", formData.condition);
-  if (formData.image) {
-    productData.append("productImage", formData.image);
-  }
+    const productData = {
+      prod_id: formData.prod_id,
+      name: formData.name,
+      brand: formData.brand,
+      dimensions: formData.dimensions,
+      categoryId: formData.categoryId,
+      location: formData.location,
+      status: formData.status,
+      condition: formData.condition,
+      productImage: formData.productImage,
+    };
 
-  
-  console.log("Submitting Product Data:");
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("Authentication token is missing or invalid.");
+      }
+   console.log("token", token)
+      const response = await fetch(
+        `${API_BASE_URL}/api/Inventory/product/create-product`,
+        {
+          method: "POST",
+          body: JSON.stringify(productData),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-  try {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      throw new Error("Authentication token is missing or invalid.");
+      if (response.ok) {
+        alert("Product added successfully!");
+      } else {
+        const errorDetails = await response.json();
+        alert(
+          `Failed to add product: ${errorDetails.message || "Unknown error"}`
+        );
+        console.error("Error details:", errorDetails);
+      }
+    } catch (err) {
+      alert("An error occurred. Please try again.");
+      console.error("Error:", err);
+    } finally {
+      setLoading(false);
     }
-    console.log("Form Data before submission:", formData);
-    console.log("token:", token);
-
-
-    const response = await fetch(`${API_BASE_URL}/api/Inventory/product/create-product`, {
-      method: "POST",
-      body: productData,
-      headers: {
-        Authorization: `Bearer ${token}`, // Ensure the token is included in the header
-      },
-    });
-
-    if (response.ok) {
-      alert("Product added successfully!");
-    } else {
-      const error = await response.json();
-      alert(`Failed to add product: ${error.message}`);
-      console.error("Error:", error);
-    }
-  } catch (err) {
-    alert("An error occurred. Please try again.");
-    console.error("Error:", err);
-  } finally {
-    setLoading(false);
-  }
-};
-
+  };
 
   return (
     <div className="max-w-4xl mx-auto p-8">
@@ -183,6 +185,32 @@ const AddProductForm = () => {
             </div>
 
             <div>
+              <Label htmlFor="status">Status</Label>
+              <Input
+                id="status"
+                name="status"
+                type="text"
+                placeholder="Status (e.g., available)"
+                value={formData.status}
+                onChange={handleChange}
+                className="mt-1"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="condition">Condition</Label>
+              <Input
+                id="condition"
+                name="condition"
+                type="text"
+                placeholder="Condition (e.g., new)"
+                value={formData.condition}
+                onChange={handleChange}
+                className="mt-1"
+              />
+            </div>
+
+            <div>
               <Label htmlFor="name">Product Name</Label>
               <Input
                 id="name"
@@ -235,10 +263,10 @@ const AddProductForm = () => {
             </div>
 
             <div>
-              <Label htmlFor="image">Product Image</Label>
+              <Label htmlFor="productImage">Product Image</Label>
               <Input
-                id="image"
-                name="image"
+                id="productImage"
+                name="productImage"
                 type="file"
                 accept="image/*"
                 onChange={handleChange}

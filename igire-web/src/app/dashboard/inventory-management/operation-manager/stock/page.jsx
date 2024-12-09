@@ -1,5 +1,4 @@
-"use client";
-
+"use client"
 import React, { useState, useEffect, useMemo } from "react";
 import { HiOutlineSearch } from "react-icons/hi";
 import { FaPlusCircle, FaFileDownload } from "react-icons/fa";
@@ -31,7 +30,7 @@ import "jspdf-autotable";
 import { useRouter } from "next/navigation";
 import DeleteStock from "./DeleteStock";
 
-export default function Stock() {
+const Stock = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [productSearchTerm, setProductSearchTerm] = useState("");
@@ -41,7 +40,6 @@ export default function Stock() {
 
   const router = useRouter();
 
-  // Fetch products and categories
   useEffect(() => {
     const fetchData = async () => {
       const token = localStorage.getItem("token");
@@ -52,7 +50,6 @@ export default function Stock() {
       }
 
       try {
-        // Fetch products
         const productResponse = await fetch(
           "https://iro-website-bn-1.onrender.com/api/Inventory/product/getAll",
           {
@@ -63,7 +60,6 @@ export default function Stock() {
         );
         const productResult = await productResponse.json();
 
-        // Fetch categories
         const categoryResponse = await fetch(
           "https://iro-website-bn-1.onrender.com/api/Inventory/category/getAll",
           {
@@ -91,7 +87,6 @@ export default function Stock() {
     fetchData();
   }, []);
 
-  // Map category IDs to names
   const categoryMap = useMemo(() => {
     const map = {};
     categories.forEach((category) => {
@@ -100,14 +95,12 @@ export default function Stock() {
     return map;
   }, [categories]);
 
-
   const productsWithCategoryName = useMemo(() => {
     return products.map((product) => ({
       ...product,
       categoryName: categoryMap[product.categoryId] || "Unknown",
     }));
   }, [products, categoryMap]);
-
 
   const filteredData = useMemo(() => {
     return productsWithCategoryName.filter(
@@ -149,6 +142,12 @@ export default function Stock() {
     });
 
     doc.save("Stock.pdf");
+  };
+
+  const handleDeleteProduct = (deletedProductId) => {
+    console.log("Product successfully deleted. Removing from list. _id:", deletedProductId);
+    setProducts(products.filter(product => product._id !== deletedProductId));
+    setOpenDeleteDialog(false);
   };
 
   const table = useReactTable({
@@ -229,6 +228,7 @@ export default function Stock() {
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => {
+                  console.log("Attempting to delete product with _id:", row.original._id);
                   setSelectedRowData(row.original);
                   setOpenDeleteDialog(true);
                 }}
@@ -251,7 +251,6 @@ export default function Stock() {
 
   return (
     <div className="w-full px-6 font-ibm">
-      {/* Search and Filters */}
       <div className="flex flex-col sm:flex-row items-center justify-between mt-14 md:mt-10 mb-3 space-y-4 sm:space-y-0">
         <p className="py-4 text-xl font-semibold">Stock Overview</p>
         <div className="relative max-w-lg w-full sm:w-auto">
@@ -294,7 +293,6 @@ export default function Stock() {
         </div>
       </div>
 
-      {/* Table */}
       <div className="rounded-md border bg-white mt-12">
         <Table className="min-w-[600px]">
           <TableHeader>
@@ -327,7 +325,6 @@ export default function Stock() {
         </Table>
       </div>
 
-      {/* Pagination */}
       <div className="flex items-center justify-end mt-4">
         <Button
           onClick={() => table.previousPage()}
@@ -351,11 +348,13 @@ export default function Stock() {
       <DeleteStock
         open={openDeleteDialog}
         onOpenChange={setOpenDeleteDialog}
-        onDelete={() => {
-          // Delete logic goes here
-          setOpenDeleteDialog(false);
-        }}
+        onDelete={handleDeleteProduct}
+        onClose={() => setOpenDeleteDialog(false)}
+        productId={selectedRowData?._id}
       />
     </div>
   );
-}
+};
+
+export default Stock;
+
