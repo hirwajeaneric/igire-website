@@ -1,14 +1,13 @@
-"use client";
-
-import React, { useState } from "react";
+"use client"
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectTrigger, SelectContent, SelectItem } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import CreateCategory from "../../categories/CreateCategory";
 
-const AddProductForm = () => {
+const EditProductForm = ({ productId }) => {
   const [formData, setFormData] = useState({
     category: "",
     name: "",
@@ -28,10 +27,19 @@ const AddProductForm = () => {
     },
   });
 
-
-
-  const [newCategory, setNewCategory] = useState({ name: "", icon: "" });
   const [categories, setCategories] = useState(["electronics", "furniture", "stationery"]);
+
+  useEffect(() => {
+    // Fetch existing product details to populate the form
+    if (productId) {
+      fetch(`https://iro-website-bn-1.onrender.com/api/Inventory/products/${productId}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setFormData({ ...data, borrowedBy: data.borrowedBy || {} });
+        })
+        .catch((error) => console.error("Error fetching product:", error));
+    }
+  }, [productId]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -49,59 +57,47 @@ const AddProductForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form Data Submitted:", formData);
+
+    // Prepare data to send to the API
+    const updatedProduct = {
+      name: formData.name,
+      category: formData.category,
+      brand: formData.brand,
+      dimensions: formData.dimensions,
+      location: formData.location,
+      status: formData.status,
+      condition: formData.condition,
+      dateOfEntry: formData.dateOfEntry,
+      image: formData.image,
+      borrowedBy: formData.borrowedBy,
+    };
+
+    // API call to update product
+    fetch(`https://iro-website-bn-1.onrender.com/api/Inventory/products/update-product/${productId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedProduct),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Product updated:", data);
+      })
+      .catch((error) => console.error("Error updating product:", error));
   };
 
-  const addCategory = () => {
+  const addCategory = (newCategory) => {
     if (newCategory.name) {
       setCategories([...categories, newCategory.name]);
-      setNewCategory({ name: "", icon: "" });
     }
   };
 
   return (
     <div className="max-w-4xl mx-auto p-8">
       <div className="flex flex-row justify-between items-center mb-6">
-        <h1 className="text-lg font-semibold">Add New Product</h1>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button className="bg-black text-white">Add Category</Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Add a New Category</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="categoryName">Category Name</Label>
-                <Input
-                  id="categoryName"
-                  placeholder="Enter category name"
-                  value={newCategory.name}
-                  onChange={(e) =>
-                    setNewCategory({ ...newCategory, name: e.target.value })
-                  }
-                />
-              </div>
-              <div>
-                <Label htmlFor="categoryIcon">Category Icon</Label>
-                <Input
-                  id="categoryIcon"
-                  placeholder="Enter emoji or text icon"
-                  value={newCategory.icon}
-                  onChange={(e) =>
-                    setNewCategory({ ...newCategory, icon: e.target.value })
-                  }
-                />
-              </div>
-              <DialogFooter>
-                <Button onClick={addCategory} className="w-full bg-black text-white">
-                  Add Category
-                </Button>
-              </DialogFooter>
-            </div>
-          </DialogContent>
-        </Dialog>
+        <h1 className="text-lg font-semibold">Edit Product</h1>
+        <CreateCategory addCategory={addCategory} />
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-8 bg-white border rounded-md p-12">
@@ -113,10 +109,9 @@ const AddProductForm = () => {
               <Label htmlFor="category">Product Category</Label>
               <Select
                 onValueChange={(value) => setFormData({ ...formData, category: value })}
+                value={formData.category}
               >
-                <SelectTrigger className="w-full mt-1">
-                  {formData.category || "Select category"}
-                </SelectTrigger>
+                <SelectTrigger className="w-full mt-1">{formData.category || "Select category"}</SelectTrigger>
                 <SelectContent>
                   {categories.map((category, index) => (
                     <SelectItem key={index} value={category}>
@@ -190,6 +185,7 @@ const AddProductForm = () => {
                 className="mt-1"
               />
             </div>
+
             <div>
               <Label htmlFor="dateOfEntry">Date of Entry</Label>
               <Input
@@ -203,9 +199,8 @@ const AddProductForm = () => {
             </div>
           </div>
           <div className="mt-8 justify-between flex ">
-          <Button className="bg-black text-white p-4">Update </Button>
-        
-        </div>
+            <Button className="bg-black text-white p-4">Update</Button>
+          </div>
         </section>
 
         <Separator />
@@ -218,10 +213,9 @@ const AddProductForm = () => {
               <Label htmlFor="status">Status</Label>
               <Select
                 onValueChange={(value) => setFormData({ ...formData, status: value })}
+                value={formData.status}
               >
-                <SelectTrigger className="w-full mt-1">
-                  {formData.status || "Select status"}
-                </SelectTrigger>
+                <SelectTrigger className="w-full mt-1">{formData.status || "Select status"}</SelectTrigger>
                 <SelectContent>
                   <SelectItem value="available">Available</SelectItem>
                   <SelectItem value="borrowed">Borrowed</SelectItem>
@@ -234,10 +228,9 @@ const AddProductForm = () => {
               <Label htmlFor="condition">Condition</Label>
               <Select
                 onValueChange={(value) => setFormData({ ...formData, condition: value })}
+                value={formData.condition}
               >
-                <SelectTrigger className="w-full mt-1">
-                  {formData.condition || "Select condition"}
-                </SelectTrigger>
+                <SelectTrigger className="w-full mt-1">{formData.condition || "Select condition"}</SelectTrigger>
                 <SelectContent>
                   <SelectItem value="new">New</SelectItem>
                   <SelectItem value="used">Used</SelectItem>
@@ -245,13 +238,11 @@ const AddProductForm = () => {
                 </SelectContent>
               </Select>
             </div>
-
-           
           </div>
           <div className="mt-8 justify-between flex ">
-          <Button className="bg-black text-white p-4">Update status</Button>
-          <Button className="bg-black text-white p-4">Update condition</Button>
-        </div>
+            <Button className="bg-black text-white p-4">Update status</Button>
+            <Button className="bg-black text-white p-4">Update condition</Button>
+          </div>
         </section>
 
         <Separator />
@@ -335,4 +326,4 @@ const AddProductForm = () => {
   );
 };
 
-export default AddProductForm;
+export default EditProductForm;

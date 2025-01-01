@@ -1,58 +1,131 @@
 "use client";
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select, SelectTrigger, SelectContent, SelectItem } from "@/components/ui/select";
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import CreateCategory from "../../categories/CreateCategory";
+
+const API_BASE_URL = "https://iro-website-bn-1.onrender.com";
 
 const AddProductForm = () => {
   const [formData, setFormData] = useState({
-    category: "",
+    prod_id: "",
+    categoryId: "",
     name: "",
     brand: "",
     dimensions: "",
     location: "",
-    status: "",
-    condition: "",
-    dateOfEntry: "",
-    image: null,
-    borrowedBy: {
-      borrowerName: "",
-      nationalId: "",
-      productId: "",
-      borrowingDate: "",
-      returningDate: "",
-    },
+    status: "available", // Default value
+    condition: "new", // Default value
+    productImage: "",
   });
 
-  const [newCategory, setNewCategory] = useState({ name: "", icon: "" });
-  const [categories, setCategories] = useState(["electronics", "furniture", "stationery"]);
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error("Unauthorized. Please log in.");
+        }
+
+        const response = await fetch(
+          `${API_BASE_URL}/api/Inventory/category/getAll`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          const errorDetails = await response.json();
+          throw new Error(errorDetails.message || "Failed to fetch categories.");
+        }
+
+        const data = await response.json();
+        setCategories(Array.isArray(data) ? data : []);
+      } catch (err) {
+        console.error("Error fetching categories:", err);
+        setError(err.message);
+        setCategories([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    if (name === "image") {
-      setFormData({ ...formData, [name]: files[0] });
-    } else if (name in formData.borrowedBy) {
-      setFormData({
-        ...formData,
-        borrowedBy: { ...formData.borrowedBy, [name]: value },
-      });
+    if (name === "productImage" && files) {
+      setFormData({ ...formData, productImage: URL.createObjectURL(files[0]) });
     } else {
       setFormData({ ...formData, [name]: value });
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Data Submitted:", formData);
-  };
+    setLoading(true);
 
-  const addCategory = () => {
-    if (newCategory.name) {
-      setCategories([...categories, newCategory.name]);
-      setNewCategory({ name: "", icon: "" });
+    const productData = {
+      prod_id: formData.prod_id,
+      name: formData.name,
+      brand: formData.brand,
+      dimensions: formData.dimensions,
+      categoryId: formData.categoryId,
+      location: formData.location,
+      status: formData.status,
+      condition: formData.condition,
+      productImage: formData.productImage,
+    };
+
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("Authentication token is missing or invalid.");
+      }
+   console.log("token", token)
+      const response = await fetch(
+        `${API_BASE_URL}/api/Inventory/product/create-product`,
+        {
+          method: "POST",
+          body: JSON.stringify(productData),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.ok) {
+        alert("Product added successfully!");
+      } else {
+        const errorDetails = await response.json();
+        alert(
+          `Failed to add product: ${errorDetails.message || "Unknown error"}`
+        );
+        console.error("Error details:", errorDetails);
+      }
+    } catch (err) {
+      alert("An error occurred. Please try again.");
+      console.error("Error:", err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -60,68 +133,81 @@ const AddProductForm = () => {
     <div className="max-w-4xl mx-auto p-8">
       <div className="flex flex-row justify-between items-center mb-6">
         <h1 className="text-lg font-semibold">Add New Product</h1>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button className="bg-black text-white">Add Category</Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Add a New Category</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="categoryName">Category Name</Label>
-                <Input
-                  id="categoryName"
-                  placeholder="Enter category name"
-                  value={newCategory.name}
-                  onChange={(e) =>
-                    setNewCategory({ ...newCategory, name: e.target.value })
-                  }
-                />
-              </div>
-              <div>
-                <Label htmlFor="categoryIcon">Category Icon</Label>
-                <Input
-                  id="categoryIcon"
-                  placeholder="Enter emoji or text icon"
-                  value={newCategory.icon}
-                  onChange={(e) =>
-                    setNewCategory({ ...newCategory, icon: e.target.value })
-                  }
-                />
-              </div>
-              <DialogFooter>
-                <Button onClick={addCategory} className="w-full bg-black text-white">
-                  Add Category
-                </Button>
-              </DialogFooter>
-            </div>
-          </DialogContent>
-        </Dialog>
+        <CreateCategory />
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-8 bg-white border rounded-xl p-6">
-        {/* Product Information Section */}
         <section>
           <h2 className="text-xl font-semibold mb-4">Product Information</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <Label htmlFor="category">Product Category</Label>
+              <Label htmlFor="prod_id">Product ID</Label>
+              <Input
+                id="prod_id"
+                name="prod_id"
+                type="text"
+                placeholder="Enter product ID"
+                value={formData.prod_id}
+                onChange={handleChange}
+                className="mt-1"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="categoryId">Product Category</Label>
               <Select
-                onValueChange={(value) => setFormData({ ...formData, category: value })}
+                onValueChange={(value) => setFormData({ ...formData, categoryId: value })}
+                value={formData.categoryId}
               >
                 <SelectTrigger className="w-full mt-1">
-                  {formData.category || "Select category"}
+                  {formData.categoryId
+                    ? categories.find((cat) => cat._id === formData.categoryId)?.categoryName || "Select category"
+                    : "Select category"}
                 </SelectTrigger>
                 <SelectContent>
-                  {categories.map((category, index) => (
-                    <SelectItem key={index} value={category}>
-                      {category}
+                  {loading ? (
+                    <SelectItem value="loading" disabled>
+                      Loading categories...
                     </SelectItem>
-                  ))}
+                  ) : categories.length > 0 ? (
+                    categories.map((category) => (
+                      <SelectItem key={category._id} value={category._id}>
+                        {category.categoryName}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <SelectItem value="no-categories" disabled>
+                      No categories available
+                    </SelectItem>
+                  )}
                 </SelectContent>
               </Select>
+            </div>
+
+            <div>
+              <Label htmlFor="status">Status</Label>
+              <Input
+                id="status"
+                name="status"
+                type="text"
+                placeholder="Status (e.g., available)"
+                value={formData.status}
+                onChange={handleChange}
+                className="mt-1"
+              />
+            </div>
+
+            <div>
+              <Label htmlFor="condition">Condition</Label>
+              <Input
+                id="condition"
+                name="condition"
+                type="text"
+                placeholder="Condition (e.g., new)"
+                value={formData.condition}
+                onChange={handleChange}
+                className="mt-1"
+              />
             </div>
 
             <div>
@@ -177,35 +263,24 @@ const AddProductForm = () => {
             </div>
 
             <div>
-              <Label htmlFor="image">Product Image</Label>
+              <Label htmlFor="productImage">Product Image</Label>
               <Input
-                id="image"
-                name="image"
+                id="productImage"
+                name="productImage"
                 type="file"
                 accept="image/*"
                 onChange={handleChange}
                 className="mt-1"
               />
             </div>
-            <div>
-              <Label htmlFor="dateOfEntry">Date of Entry</Label>
-              <Input
-                id="dateOfEntry"
-                name="dateOfEntry"
-                type="date"
-                value={formData.dateOfEntry}
-                onChange={handleChange}
-                className="mt-1"
-              />
-            </div>
           </div>
-          <div className="mt-8 w-full  ">
-          <Button className="bg-black w-full text-white ">Update </Button>
-        
-        </div>
-        </section>
 
-        
+          <div className="mt-8 w-full">
+            <Button type="submit" className="bg-black w-full text-white" disabled={loading}>
+              {loading ? "Adding..." : "Add"}
+            </Button>
+          </div>
+        </section>
       </form>
     </div>
   );

@@ -90,11 +90,11 @@ const SideBar = () => {
             Inventory management
           </h1>
         </div>
-        <div className="flex pt-5 px-10 items-center"> 
+        <div className="flex mt-10 items-center justify-center"> 
   <h3
     className={`${
       isSidebarCollapsed ? "hidden" : "block"
-    } text-xl  underline`}
+    } text-xl  text-green-700`}
   >
     Admin
   </h3>
@@ -108,7 +108,7 @@ const SideBar = () => {
             isCollapsed={isSidebarCollapsed}
           />
           <SidebarLink
-            href="/settings"
+            href="/dashboard/inventory-management/admin/profile"
             icon={SlidersHorizontal}
             label="Settings"
             isCollapsed={isSidebarCollapsed}

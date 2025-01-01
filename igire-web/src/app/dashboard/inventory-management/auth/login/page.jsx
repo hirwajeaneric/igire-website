@@ -13,6 +13,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import React, { useState } from "react";
 import axios from "axios";
+import  {jwtDecode} from "jwt-decode";
+
 const LogIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,6 +22,7 @@ const LogIn = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [isSubmit, setIsSubmit] = useState(false);
   const router = useRouter();
+
   const validateForm = () => {
     if (!email.trim() || !password.trim()) {
       setError("Both email and password are required.");
@@ -34,28 +37,43 @@ const LogIn = () => {
     setSuccessMessage("");
     if (!validateForm()) return;
     setIsSubmit(true);
+
     try {
       console.log("Trying to login with:", { email, password });
+
       const response = await axios.post(
-        "https://iro-employee-bn.onrender.com/auth/login",
+        "https://iro-website-bn-1.onrender.com/api/Inventory/users/login",
         { email, password }
       );
       console.log("API Response Data:", response.data);
-
-      const token = response.data;
-      const position = response.data.user.position;
-
-      console.log("Token:", token);
-      console.log("Position:", position);
-
-      if (!token || !position) {
-        setError("Invalid response from server. Please try again.");
+      
+      const token = response.data.token; 
+      
+      if (!token) {
+        setError("No authentication token received.");
         return;
       }
 
+      // Decode the token
+      let decodedToken;
+      try {
+        decodedToken = jwtDecode(token);
+        console.log("Decoded Token:", decodedToken);
+      } catch (decodeError) {
+        console.error("Token decoding error:", decodeError);
+        setError("Invalid authentication token.");
+        return;
+      }
+
+      // Use the role from the decoded token, with a fallback
+      const position = decodedToken.role || "unknown";
+      console.log("User Role:", position);
+
+      // Store token and role in localStorage
       localStorage.setItem("token", token);
       localStorage.setItem("position", position);
 
+      // Routing logic based on decoded role
       let redirectPath = "/";
       switch (position.toLowerCase()) {
         case "hr":
@@ -67,7 +85,7 @@ const LogIn = () => {
         case "admin":
           redirectPath = "/dashboard/inventory-management/admin";
           break;
-        case "operation manager":
+        case "operations manager":
           redirectPath = "/dashboard/inventory-management/operation-manager";
           break;
         default:
@@ -89,7 +107,6 @@ const LogIn = () => {
       setIsSubmit(false);
     }
   };
-
 
   return (
     <div
@@ -152,4 +169,5 @@ const LogIn = () => {
     </div>
   );
 };
+
 export default LogIn;

@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from "recharts";
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import React, { useState } from "react";
 
 const Dashboard = () => {
@@ -10,7 +10,6 @@ const Dashboard = () => {
     { title: "Stolen products", value: "1", color: "bg-white", textColor: "text-red-700" },
     { title: "Borrowed products", value: "2", color: "bg-white", textColor: "text-yellow-700" },
     { title: "Available products", value: "78", color: "bg-white", textColor: "text-green-900" },
-
   ];
 
   const sales = [
@@ -24,26 +23,41 @@ const Dashboard = () => {
 
   const data = {
     "2024-01": [
-      { day: "1", damaged: 2, stolen: 1 },
-      { day: "2", damaged: 4, stolen: 0 },
-      { day: "3", damaged: 1, stolen: 2 },
-      { day: "4", damaged: 0, stolen: 0 },
-      { day: "5", damaged: 3, stolen: 0 },
-      { day: "6", damaged: 1, stolen: 1 },
-      { day: "7", damaged: 1, stolen: 0 },
-      { day: "8", damaged: 1, stolen: 1 },
-      { day: "9", damaged: 0, stolen: 1 },
+      { day: "01", damaged: 0, stolen: 0 },
+      { day: "02", damaged: 4, stolen: 0 },
+      { day: "03", damaged: 1, stolen: 2 },
+      { day: "04", damaged: 0, stolen: 0 },
+      { day: "05", damaged: 15, stolen: 0 },
+      { day: "06", damaged: 1, stolen: 1 },
+      { day: "07", damaged: 1, stolen: 0 },
+      { day: "08", damaged: 1, stolen: 1 },
+      { day: "09", damaged: 0, stolen: 0 },
       { day: "10", damaged: 1, stolen: 1 },
-      // ... more days
-    ],
-    "2024-02": [
-      { day: "1", damaged: 3, stolen: 1 },
-      { day: "2", damaged: 2, stolen: 3 },
-      // ... more days
+      { day: "11", damaged: 5, stolen: 2 },
+      { day: "12", damaged: 1, stolen: 1 },
+      { day: "13", damaged: 1, stolen: 1 },
+      { day: "14", damaged: 1, stolen: 1 },
+      { day: "15", damaged: 1, stolen: 1 },
+      { day: "16", damaged: 0, stolen: 0 },
+      { day: "17", damaged: 3, stolen: 0 },
+      { day: "18", damaged: 1, stolen: 1 },
+      { day: "19", damaged: 1, stolen: 0 },
+      { day: "20", damaged: 1, stolen: 1 },
+      { day: "21", damaged: 20, stolen: 0 },
+      { day: "22", damaged: 2, stolen: 1 },
+      { day: "23", damaged: 4, stolen: 0 },
+      { day: "24", damaged: 1, stolen: 2 },
+      { day: "25", damaged: 0, stolen: 0 },
+      { day: "26", damaged: 3, stolen: 0 },
+      { day: "27", damaged: 1, stolen: 1 },
+      { day: "28", damaged: 1, stolen: 1 },
+      { day: "29", damaged: 0, stolen: 0 },
+      { day: "30", damaged: 3, stolen: 0 },
+      { day: "31", damaged: 1, stolen: 1 },
     ],
   };
 
-  const [selectedYear, setSelectedYear] = useState("2024");
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear().toString());
   const [selectedMonth, setSelectedMonth] = useState("01");
 
   const handleYearChange = (e) => setSelectedYear(e.target.value);
@@ -53,46 +67,24 @@ const Dashboard = () => {
 
   return (
     <div className="p-10 space-y-6 font-ibm">
-      <div className="flex flex-row justify-between">
+      <div className="flex flex-col md:flex-row items-center mt-10 md:mt-0 justify-between">
         <div>
-          <p className=" text-xl font-semibold ">Dashboard</p>
+          <p className="text-xl font-semibold">Dashboard</p>
         </div>
-
-        {/* Year and Month Selectors */}
-        <div className="flex gap-2 items-center">
-          <select
-            value={selectedYear}
-            onChange={handleYearChange}
-            className="border p-2 rounded"
-          > 
-           <option value="2025">2023</option>
-            <option value="2024">2024</option>
+        <div className="flex gap-2 mt-4 md:mt-0 items-center">
+          <select value={selectedYear} onChange={handleYearChange} className="border p-2 rounded">
             <option value="2023">2023</option>
-            
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
           </select>
-          <select
-            value={selectedMonth}
-            onChange={handleMonthChange}
-            className="border p-2 rounded"
-          >
+          <select value={selectedMonth} onChange={handleMonthChange} className="border p-2 rounded">
             <option value="01">January</option>
             <option value="02">February</option>
-            <option value="03">March</option>
-            <option value="04">April</option>
-            <option value="05">May</option>
-            <option value="06">June</option>
-            <option value="07">July</option>
-            <option value="08">August</option>
-            <option value="09">September</option>
-            <option value="10">October</option>
-            <option value="11">November</option>
-            <option value="12">December</option>
           </select>
         </div>
       </div>
 
-      {/* Stats Section */}
-      <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-4 gap-12 ">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
         {stats.map((stat, index) => (
           <Card
             key={index}
@@ -108,9 +100,8 @@ const Dashboard = () => {
         ))}
       </div>
 
-      {/* Overview and Recent Sales Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <Card>
+      <div className="flex flex-col md:flex-row w-[100%] gap-4">
+        <Card className=" w-full md:w-[60%]">
           <CardHeader>
             <CardTitle>Products Overview</CardTitle>
             <CardDescription>
@@ -118,26 +109,27 @@ const Dashboard = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <LineChart
-              width={500}
-              height={300}
-              data={filteredData}
-              margin={{ top: 20, right: 40, bottom: 20, left: -40 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="day" />
-              <YAxis />
-              <Tooltip />
-              <Line type="monotone" dataKey="damaged" stroke="#ff7300" />
-              <Line type="monotone" dataKey="stolen" stroke="#387908" />
-            </LineChart>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={filteredData} margin={{ top: 20, right: 10, bottom: 20, left: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="day" label={{ value: "Days", position: "insideBottomRight", offset: 0 , }} />
+                <YAxis
+                  // // interval="preserveStartEnd"
+                  // domain={[0, 25]}
+                  // // tickInterval={5}
+                  label={{ value: "Products", angle: -90, position: "insideLeft" }}
+                />
+                <Tooltip />
+                <Line type="monotone" dataKey="damaged" stroke="#ff7300" />
+                <Line type="monotone" dataKey="stolen" stroke="#387908" />
+              </LineChart>
+            </ResponsiveContainer>
           </CardContent>
         </Card>
 
-        {/* Recent Sales */}
-        <Card>
+        <Card className=" w-full md:w-[40%]">
           <CardHeader>
-            <CardTitle className="text-lg">Current product categories</CardTitle>
+            <CardTitle className="text-lg">Current Product Categories</CardTitle>
           </CardHeader>
           <CardContent>
             <ul>

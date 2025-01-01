@@ -1,6 +1,5 @@
-"use client";
-
-import React, { useState, useMemo } from "react";
+"use client"
+import React, { useState, useEffect, useMemo } from "react";
 import { HiOutlineSearch } from "react-icons/hi";
 import { FaPlusCircle, FaFileDownload } from "react-icons/fa";
 import { MdMoreHoriz } from "react-icons/md";
@@ -26,152 +25,115 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
-import EditStock from "./EditStock";
-import DeleteStock from "./DeleteStock";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { useRouter } from "next/navigation";
+import DeleteStock from "./DeleteStock";
 
-
-const data = [
-  {
-    id: 1,
-    category: "Furniture",
-    name: "Table",
-    brand: "Product A",
-    dimensions: "5x3 ft",
-    location: "Class 1",
-    status: "Available",
-    condition: "New",
-    dateOfEntry: "2023-09-01",
-    image: "https://via.placeholder.com/100",
-  },
-  {
-    id: 2,
-    category: "Electronics",
-    name: "Projector",
-    brand: "Brand B",
-    dimensions: "12x8 in",
-    location: "Office",
-    status: "Borrowed",
-    condition: "Used",
-    dateOfEntry: "2023-09-15",
-    borrowedBy: {
-      borrowerName: "Jane Smith",
-      nationalId: "987654321",
-      productId: "002",
-      borrowingDate: "2023-11-01",
-      returningDate: "2023-11-10",
-    },
-    image: "https://via.placeholder.com/100",
-  },
-  {
-    id: 1,
-    category: "Furniture",
-    name: "Table",
-    brand: "Product A",
-    dimensions: "5x3 ft",
-    location: "Class 1",
-    status: "Available",
-    condition: "New",
-    dateOfEntry: "2023-09-01",
-    image: "https://via.placeholder.com/100",
-  },
-  {
-    id: 2,
-    category: "Electronics",
-    name: "Projector",
-    brand: "Brand B",
-    dimensions: "12x8 in",
-    location: "Office",
-    status: "Borrowed",
-    condition: "Used",
-    dateOfEntry: "2023-09-15",
-    borrowedBy: {
-      borrowerName: "Jane Smith",
-      nationalId: "987654321",
-      productId: "002",
-      borrowingDate: "2023-11-01",
-      returningDate: "2023-11-10",
-    },
-    image: "https://via.placeholder.com/100",
-  },
-  {
-    id: 1,
-    category: "Furniture",
-    name: "Table",
-    brand: "Product A",
-    dimensions: "5x3 ft",
-    location: "Class 1",
-    status: "Available",
-    condition: "New",
-    dateOfEntry: "2023-09-01",
-    image: "https://via.placeholder.com/100",
-  },
-  {
-    id: 2,
-    category: "Electronics",
-    name: "Projector",
-    brand: "Brand B",
-    dimensions: "12x8 in",
-    location: "Office",
-    status: "Borrowed",
-    condition: "Used",
-    dateOfEntry: "2023-09-15",
-    borrowedBy: {
-      borrowerName: "Jane Smith",
-      nationalId: "987654321",
-      productId: "002",
-      borrowingDate: "2023-11-01",
-      returningDate: "2023-11-10",
-    },
-    image: "https://via.placeholder.com/100",
-  },
-];
-
-export default function Stock() {
+const Stock = () => {
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [productSearchTerm, setProductSearchTerm] = useState("");
   const [locationFilter, setLocationFilter] = useState("");
-  // const [openEditDialog, setOpenEditDialog] = useState(false);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
 
   const router = useRouter();
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        console.error("Authentication token not found. Please log in.");
+        return;
+      }
+
+      try {
+        const productResponse = await fetch(
+          "https://iro-website-bn-1.onrender.com/api/Inventory/product/getAll",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const productResult = await productResponse.json();
+
+        const categoryResponse = await fetch(
+          "https://iro-website-bn-1.onrender.com/api/Inventory/category/getAll",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const categoryResult = await categoryResponse.json();
+
+        if (productResponse.ok && categoryResponse.ok) {
+          setProducts(productResult.data || []);
+          setCategories(categoryResult.data || []);
+        } else {
+          console.error(
+            "Error fetching data:",
+            productResult.message || categoryResult.message
+          );
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const categoryMap = useMemo(() => {
+    const map = {};
+    categories.forEach((category) => {
+      map[category._id] = category.categoryName;
+    });
+    return map;
+  }, [categories]);
+
+  const productsWithCategoryName = useMemo(() => {
+    return products.map((product) => ({
+      ...product,
+      categoryName: categoryMap[product.categoryId] || "Unknown",
+    }));
+  }, [products, categoryMap]);
+
   const filteredData = useMemo(() => {
-    return data.filter(
+    return productsWithCategoryName.filter(
       (item) =>
         item.name.toLowerCase().includes(productSearchTerm.toLowerCase()) &&
         (locationFilter === "" || item.location.includes(locationFilter))
     );
-  }, [productSearchTerm, locationFilter]);
+  }, [productSearchTerm, locationFilter, productsWithCategoryName]);
 
   const handleExportPDF = () => {
     const doc = new jsPDF();
     const tableHeaders = [
-      "ID",
-      "Category",
+      "Product ID",
       "Name",
       "Brand",
       "Dimensions",
+      "Category Name",
       "Location",
       "Status",
       "Condition",
-      "Date of Entry",
-      "Borrower Name",
+      "Image",
     ];
 
-    const rows = data.map((item) => [
-      item.id || "N/A",
-      item.category || "N/A",
+    const rows = filteredData.map((item) => [
+      item.prod_id || "N/A",
       item.name || "N/A",
       item.brand || "N/A",
       item.dimensions || "N/A",
+      item.categoryName || "N/A",
       item.location || "N/A",
       item.status || "N/A",
       item.condition || "N/A",
-      item.dateOfEntry || "N/A",
-      item.borrowedBy?.borrowerName || "N/A",
+      item.productImage || "N/A",
     ]);
 
     doc.autoTable({
@@ -181,22 +143,27 @@ export default function Stock() {
 
     doc.save("Stock.pdf");
   };
-  
+
+  const handleDeleteProduct = (deletedProductId) => {
+    console.log("Product successfully deleted. Removing from list. _id:", deletedProductId);
+    setProducts(products.filter(product => product._id !== deletedProductId));
+    setOpenDeleteDialog(false);
+  };
+
   const table = useReactTable({
     data: filteredData,
     columns: [
       {
-        accessorKey: "id",
-        header: "ID",
-        cell: ({ row }) => <div>{row.original.id}</div>,
+        accessorKey: "prod_id",
+        header: "Product ID",
       },
       {
-        accessorKey: "image",
+        accessorKey: "productImage",
         header: "Image",
         cell: ({ row }) => (
           <div>
             <img
-              src={row.original.image}
+              src={row.original.productImage}
               alt={row.original.name}
               style={{ width: "50px", height: "50px", objectFit: "cover" }}
             />
@@ -204,34 +171,28 @@ export default function Stock() {
         ),
       },
       {
-        accessorKey: "category",
-        header: "Category",
-        cell: ({ row }) => <div>{row.original.category}</div>,
-      },
-      {
         accessorKey: "name",
         header: "Name",
-        cell: ({ row }) => <div>{row.original.name}</div>,
       },
       {
         accessorKey: "brand",
         header: "Brand",
-        cell: ({ row }) => <div>{row.original.brand}</div>,
       },
       {
         accessorKey: "dimensions",
         header: "Dimensions",
-        cell: ({ row }) => <div>{row.original.dimensions}</div>,
+      },
+      {
+        accessorKey: "categoryName",
+        header: "Category Name",
       },
       {
         accessorKey: "location",
         header: "Location",
-        cell: ({ row }) => <div>{row.original.location}</div>,
       },
       {
         accessorKey: "status",
         header: "Status",
-        cell: ({ row }) => <div>{row.original.status}</div>,
       },
       {
         accessorKey: "condition",
@@ -239,56 +200,43 @@ export default function Stock() {
         cell: ({ row }) => {
           const condition = row.original.condition;
           const getColor = () => {
-            if (condition === "New") return "text-green-600";
-            if (condition === "Used") return "text-yellow-600";
-            if (condition === "Damaged") return "text-red-600";
+            if (condition === "new") return "text-green-600";
+            if (condition === "used") return "text-yellow-600";
+            if (condition === "damaged") return "text-red-600";
             return "text-gray-600";
           };
           return <div className={getColor()}>{condition}</div>;
         },
       },
       {
-        accessorKey: "dateOfEntry",
-        header: "Date of Entry",
-        cell: ({ row }) => <div>{row.original.dateOfEntry}</div>,
-      },
-      {
-        accessorKey: "borrowedBy.borrowerName",
-        header: "Borrower Name",
-        cell: ({ row }) => (
-          <div>{row.original.borrowedBy?.borrowerName || "N/A"}</div>
-        ),
-      },
-      {
         id: "actions",
         header: "Actions",
         cell: ({ row }) => (
-          <div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="ml-auto">
-                  <MdMoreHoriz size={20} />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="ml-auto">
+                <MdMoreHoriz size={20} />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
               <DropdownMenuItem
-                  onClick={() => {
-                    router.push(`/dashboard/inventory-management/operation-manager/stock/edit?id=${row.original.id}`);
-                  }}
-                >
-                  Edit
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => {
-                    setSelectedRowData(row.original);
-                    setOpenDeleteDialog(true);
-                  }}
-                >
-                  Delete
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+                onClick={() => {
+                  router.push(`stock/edit/?${row.original.prod_id}`);
+                }}
+              >
+                Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  console.log("Attempting to delete product with _id:", row.original._id);
+                  setSelectedRowData(row.original);
+                  setOpenDeleteDialog(true);
+                }}
+              >
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         ),
       },
     ],
@@ -303,10 +251,9 @@ export default function Stock() {
 
   return (
     <div className="w-full px-6 font-ibm">
-      {/* Search and Filters */}
-      <div className="flex items-center justify-between mt-10 mb-3 ">
+      <div className="flex flex-col sm:flex-row items-center justify-between mt-14 md:mt-10 mb-3 space-y-4 sm:space-y-0">
         <p className="py-4 text-xl font-semibold">Stock Overview</p>
-        <div className="relative max-w-lg">
+        <div className="relative max-w-lg w-full sm:w-auto">
           <HiOutlineSearch
             className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
             size={20}
@@ -334,19 +281,21 @@ export default function Stock() {
             onClick={handleExportPDF}
             className="flex items-center text-[15px] px-1 py-2 border rounded-md bg-white"
           >
-            <FaFileDownload className="mr-1" /> <span>Download</span>
+            <FaFileDownload className="mr-1 sm:mr-0" />
+            <span className="hidden sm:inline">Download</span>
           </button>
           <a href="stock/addProduct">
             <button className="flex items-center px-1 py-2 text-[15px] border rounded-md bg-black text-white">
-              <FaPlusCircle className="mr-1" /> <span>Add stock</span>
+              <FaPlusCircle className="mr-1 sm:mr-0" />
+              <span className="hidden sm:inline">Add stock</span>
             </button>
           </a>
         </div>
       </div>
-      {/* Table */}
+
       <div className="rounded-md border bg-white mt-12">
-        <Table>
-          <TableHeader className="">
+        <Table className="min-w-[600px]">
+          <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
@@ -367,10 +316,7 @@ export default function Stock() {
               <TableRow key={row.id}>
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
-                    {flexRender(
-                      cell.column.columnDef.cell,
-                      cell.getContext()
-                    )}
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
               </TableRow>
@@ -378,47 +324,37 @@ export default function Stock() {
           </TableBody>
         </Table>
       </div>
-      {/* Pagination */}
+
       <div className="flex items-center justify-end mt-4">
-  <Button
-    onClick={() => table.previousPage()}
-    disabled={!table.getCanPreviousPage()}
-    className="px-1 py-1 flex items-center"
-  >
-    <BiChevronLeft size={20} className="" />
-  </Button>
-  <span className="mx-2">
-    Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
-  </span>
-  
-  <Button
-    onClick={() => table.nextPage()}
-    disabled={!table.getCanNextPage()}
-    className="px-1 py-1 flex items-center"
-  >
-    <BiChevronRight size={20} className="" />
-  </Button>
-</div>
-{/* <EditStock
-  open={openEditDialog}
-  onOpenChange={setOpenEditDialog}
-  selectedRowData={selectedRowData}
-  onSave={() => {
-    // Save logic goes here
-    setOpenEditDialog(false);
-  }}
-/> */}
+        <Button
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+          className="px-1 py-1 flex items-center"
+        >
+          <BiChevronLeft size={20} />
+        </Button>
+        <span className="mx-2">
+          Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+        </span>
+        <Button
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+          className="px-1 py-1 flex items-center"
+        >
+          <BiChevronRight size={20} />
+        </Button>
+      </div>
 
-<DeleteStock
-  open={openDeleteDialog}
-  onOpenChange={setOpenDeleteDialog}
-  onDelete={() => {
-    // Delete logic goes here
-    setOpenDeleteDialog(false);
-  }}
-/>
-
-
+      <DeleteStock
+        open={openDeleteDialog}
+        onOpenChange={setOpenDeleteDialog}
+        onDelete={handleDeleteProduct}
+        onClose={() => setOpenDeleteDialog(false)}
+        productId={selectedRowData?._id}
+      />
     </div>
   );
-}
+};
+
+export default Stock;
+
